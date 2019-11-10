@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>学生管理</title>
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap-table/css/bootstrap-table.css}">
+    <link rel="stylesheet" th:href="@{/js/layer/theme/default/layer.css}">
+
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/css/staff-manage/student.css}">
+</head>
+<body>
+    <div id="content">
+        <div class="well container">
+            <div class="row select layui-form form">
+                <div class="col-md-2 layui-form-item">
+                    <select name="city" lay-verify="">
+                        <option value="">学院</option>
+                        <option value="010">信息工程学院</option>
+                        <option value="021">机电工程学院</option>
+                        <option value="0571">音乐学院</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="city" lay-verify="">
+                        <option value="">专业</option>
+                        <option value="010">电子信息工程</option>
+                        <option value="021">计算机科学与技术</option>
+                        <option value="0571">通信工程</option>
+                        <option value="0571">互联网工程</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="city" lay-verify="">
+                        <option value="">班级</option>
+                        <option value="010">电信151</option>
+                        <option value="021">电信152</option>
+                        <option value="0571">电信153</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="text" name="title" placeholder="请输入学生名字" autocomplete="off" class="layui-input">
+
+                </div>
+                <div  class="col-md-4">
+                    <button type="button" class="layui-btn">搜索</button>
+                </div>
+            </div>
+            <hr>
+            <button type="button" class="btn btn-primary" onclick="addDialog()">增加学生</button>
+            <div class="form-tab">
+                <table id="TableList" class="table"
+                    width="100%" style="table-layout:fixed;">
+                    <thead>
+                        <tr>
+                            <th data-width="50" data-field="xl"
+                                data-formatter="xlFormatter" data-show-tip="false">序号</th>
+                            <th data-align="center" data-field="answerTitle" data-show-tip="false">学号</th>
+                            <th data-align="center" data-field="answerAuthor">姓名</th>
+                            <th data-align="center" data-field="answerDate">学院</th>
+                            <th data-align="center" data-field="answerDate">专业</th>
+                            <th data-align="center" data-field="answerDate">班级</th>
+                            <th data-align="center" data-field="answerDate">性别</th>
+                            <th data-align="center" data-field="answerDate">联系方式</th>
+                            <th data-align="center" data-width="100" data-field="operation"
+                                data-formatter="operation_formatter" data-show-tip="false">操作</th>
+                        </tr>
+                    </thead>
+                </table>     
+            </div>
+        </div>
+    </div>
+   
+    <script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap-table/js/bootstrap-table.js}"></script>
+    <script th:src="@{/js/bootstrap-table/js/bootstrap-table-zh-CN.js}"></script>
+    <script th:src="@{/js/layui/layui.all.js}"></script>
+    <script th:src="@{/js/layer/layer.js}"></script>
+    <script th:src="@{/js/public/table-init.js}"></script>
+
+    <script th:inline="javascript">
+        //<![CDATA[
+        $(function(){
+            Events.TableInit({
+                bootstrapTableId:'#TableList',
+                url:'',
+                option:{
+
+                }
+            });
+        
+        });
+
+        function addDialog (){
+            let href='/staff/student/dialog';
+            layer.open({//iframe层
+                type : 2,//用1类型容易出错，建议用2
+                id : 'addStudent', //设定一个id，防止重复弹出
+                area : [ '500px', '525px' ],
+                fix : false, //不固定
+                title : '新增学生',
+                maxmin : false,
+                content : href,
+                btn : [ '提交', '关闭' ],
+                yes : function(index, layero) {
+                    $(layero).find("iframe")[0].contentWindow.saveSubmit();
+                }
+            });
+        }
+
+        //]]>
+    </script>
+</body>
+</html>

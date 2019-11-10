@@ -1,0 +1,93 @@
+.login-bg{
+    background: url(../../image/login_bg_0.jpg) no-repeat 0 0  ;
+    background-size: cover;
+    height: 100vh;
+    position: relative;
+}
+.login-form{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -225px;
+    margin-left: -375px;
+    width: 750px;
+    height: 450px;
+    display: flex;
+}
+.form-left{
+    width: 300px;
+    height: 450px;
+    background:url(../../image/form-left.png) no-repeat;
+    background-size: cover;
+}
+
+.form-left .txt1{
+    color: #fff;
+    font-size: 30px;
+    margin: 80px 0 0 20px;
+    /* margin-left: 20px; */
+}
+.form-left .txt2{
+    color: #fff;
+    font-size: 20px;
+    margin: 10px 0 0 20px;
+    /* margin-left: 20px; */
+}
+.form-left .txt3{
+    color: #fff;
+    font-size: 8px;
+    margin-top: 2px;
+    margin-left: 20px;
+}
+
+.form-right{
+    width: 450px;
+    height: 430px;
+    margin-top: 10px;
+    background: #fff;
+}
+
+.form-signin {
+    max-width: 330px;
+    padding: 43px 15px 15px 15px;
+    margin: 10px auto;
+}
+.form-signin .sign{
+    font-size: 24px;
+    color: #231F20;
+    font-weight: 600;
+    margin-top: 20px;
+}
+.form-control{
+    margin-top: 20px;
+}
+.form-chex{
+    margin-top: 5px;
+    width: 250px;
+    display: flex;
+    justify-content:space-between;
+    height: 50px;
+    margin-left: 20px;
+}
+.form-chex .radio-line{
+    margin-top: 12px;
+}
+.form-chex .radio label{
+    padding-left: 0;
+}
+.form-signin .sign-btn{
+    width: 60%;
+    border-radius: 100px;
+    background: #104E8B;
+    height: 40px;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    margin-top: 30px;
+}
+.warding{
+    width: 400px;
+    margin-top: -100px;
+    
+}

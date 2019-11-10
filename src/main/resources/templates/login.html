@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登录界面-简约</title>
+    <link rel="shortcut icon" th:href="@{/image/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}" >
+    <link rel="stylesheet" th:href="@{/css/dialog.css}">
+    <link rel="stylesheet" th:href="@{/css/login/index.css}">
+</head>
+<body>
+    <div class="login-bg">
+        <div class="login-form">
+            <div class="form-left">
+                <p class="txt1">欢迎回来</p>
+                <p class="txt2">学生成绩管理系统</p>
+                <P class="txt3">Student achievement management system</P>
+            </div>
+            <div class="form-right">
+                <!-- <div class="warding">
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>错误!</strong> 用户名或密码输入错误.
+                    </div>
+                </div> -->
+                <form id="loginForm" class="form-signin form-horizontal" role="form">
+                    <div class="sign"> Sign In</div>
+                    <div class="form-group">
+                        <div class="row">
+                            <input type="text" id="userName" name="userName" class="form-control" placeholder="用户名" autofocus required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="密码" required/>
+                        </div>
+                    </div>
+                    <button type="button" class="sign-btn" onclick="onSignBtn()"> 立即登录</button>
+                </form>
+            </div>
+        </div>
+    </div>
+<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+<!-- jquery.validate校验 -->
+<script type="text/javascript" th:src="@{/js/jquery.validate/jquery.validate.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.validate/jquery.validate.ext.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.validate/messages_zh.js}"></script>
+<script th:src="@{/js/zepto.min.js}"></script>
+<script th:src="@{/js/dialog.min.js}"></script>
+<script th:inline="javascript">
+    //<![CDATA[
+    $(function(){
+
+    });
+
+    function onSignBtn() {
+        let validor = $("#loginForm").validate();
+        if (validor.form()){
+            let url = '/login';
+            $.post(url, $("#loginForm").serializeArray(),function (data) {
+                if (data.code === 200){
+                    window.location.href = "/index";
+                }else {
+                    alert(data.msg);
+                }
+            },"json");
+        }
+    }
+    //]]>
+</script>
+</body>
+</html>
