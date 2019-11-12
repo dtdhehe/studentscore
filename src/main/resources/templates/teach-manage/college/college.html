@@ -42,7 +42,7 @@
                 </form>
             </div>
             <hr>
-            <button type="button" class="btn btn-primary" onclick="addDialog()">增加学院</button>
+            <button type="button" class="btn btn-primary" onclick="addDialog()">添加学院</button>
             <div class="form-tab">
                 <table id="TableList" class="table"
                     width="100%" style="table-layout:fixed;">
@@ -52,6 +52,7 @@
                                 data-formatter="xlFormatter" data-show-tip="false">序号</th>
                             <th data-width="100" data-align="center" data-field="departmentNo">学院编号</th>
                             <th data-width="200" data-align="center" data-field="departmentName">学院名称</th>
+                            <th data-width="200" data-align="center" data-field="updateTime">修改时间</th>
                             <th data-width="100" data-align="center" data-field="operation"
                                 data-formatter="operation_formatter" data-show-tip="false">操作</th>
                         </tr>
@@ -120,9 +121,49 @@
         return operation;
     }
 
+    //编辑
+    function onEditRow(id) {
+        let href='/teach/getCollegeInfo?id='+id;
+        layer.open({//iframe层
+            type : 2,//用1类型容易出错，建议用2
+            id : 'addStudent', //设定一个id，防止重复弹出
+            area : [ '400px', '235px' ],
+            fix : false, //不固定
+            title : '新增学院',
+            maxmin : false,
+            content : href,
+            btn : [ '提交', '关闭' ],
+            yes : function(index, layero) {
+                $(layero).find("iframe")[0].contentWindow.saveSubmit();
+            }
+        });
+    }
+
+    //删除
+    function onDeleteRow(id) {
+        layer.confirm("确定要删除选中记录吗？", {
+            btn: ['是', '否']
+        }, function (index) {
+            let url = '/teach/college/'+id;
+            $.ajax({
+                url:url,
+                type:'DELETE',
+                success:function (data) {
+                    if (data.code === 200){
+                        layer.close(index);
+                        $("#TableList").bootstrapTable("refresh");
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                    }
+                }
+            });
+        });
+    }
+    
     //刷新
     function refresh(msg) {
         layer.closeAll();
+        $("#TableList").bootstrapTable("refresh");
         layer.msg(msg, {time:1500, icon:1});
     }
     

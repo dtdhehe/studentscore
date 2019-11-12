@@ -8,6 +8,8 @@ import com.dtdhehe.studentscore.vo.ResultVO;
 import com.dtdhehe.studentscore.vo.TableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -41,7 +43,13 @@ public class TeachController {
      * @return
      */
     @GetMapping("/getCollegeInfo")
-    public String getCollegeInfo(){
+    public String getCollegeInfo(@RequestParam(value = "id",required = false)String id, Model model){
+        Department department = new Department();
+        if (!StringUtils.isEmpty(id)){
+            //id不为空，则为编辑。查询该对象
+            department = departmentService.findById(id);
+        }
+        model.addAttribute("department",department);
         return "teach-manage/college/dialog";
     }
 
@@ -52,7 +60,7 @@ public class TeachController {
      */
     @PostMapping("/college")
     @ResponseBody
-    public ResultVO save(Department department){
+    public ResultVO saveDepartment(Department department){
         Department dbDepartment = departmentService.findByNo(department.getDepartmentNo());
         if (dbDepartment != null){
             return ResultUtils.failed("该学院编号已存在");
@@ -61,6 +69,43 @@ public class TeachController {
         return result.equals(ConstantUtils.SUCCESS)?ResultUtils.success("保存成功"):ResultUtils.failed("保存失败,请重新保存");
     }
 
+    /**
+     * 更新学院
+     * @param department
+     * @param id
+     * @return
+     */
+    @PutMapping("/college/{id}")
+    @ResponseBody
+    public ResultVO updateDepartment(Department department,@PathVariable("id") String id){
+        Department dbDepartment = departmentService.findByNo(department.getDepartmentNo());
+        if (dbDepartment != null && !dbDepartment.getId().equals(id)){
+            return ResultUtils.failed("该学院编号已存在");
+        }
+        Integer result = departmentService.saveOrUpdate(department);
+        return result.equals(ConstantUtils.SUCCESS)?ResultUtils.success("修改成功"):ResultUtils.failed("修改失败,请重新修改");
+    }
+
+    /**
+     * 删除学院
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/college/{id}")
+    @ResponseBody
+    public ResultVO deleteDepartment(@PathVariable("id") String id){
+        Integer result = departmentService.delete(id);
+        return result.equals(ConstantUtils.SUCCESS)?ResultUtils.success("删除成功"):ResultUtils.failed("删除失败,请重新删除");
+    }
+
+    /**
+     * 查询学院列表
+     * @param rows
+     * @param page
+     * @param departmentNo
+     * @param departmentName
+     * @return
+     */
     @GetMapping("/college")
     @ResponseBody
     public TableModel queryDepartment(@RequestParam("rows") Integer rows,@RequestParam("page") Integer page,

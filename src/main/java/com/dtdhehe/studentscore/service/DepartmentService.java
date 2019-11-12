@@ -32,4 +32,18 @@ public interface DepartmentService {
      * @return
      */
     Map<String,Object> queryDepartment(Map<String,Object> queryMap);
+
+    /**
+     * 根据id查找对象
+     * @param id
+     * @return
+     */
+    Department findById(String id);
+
+    /**
+     * 根据id删除对象(逻辑删除)
+     * @param id
+     * @return
+     */
+    Integer delete(String id);
 }

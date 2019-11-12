@@ -20,17 +20,18 @@
 <body>
     <div class="body">
         <form class="layui-form form" id="dataForm">
+            <input type="hidden" id="id" name="id" th:value="${department.id}" />
             <div class="layui-form-item row">
                 <label class="layui-form-label">编号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="departmentNo" required
+                    <input type="text" name="departmentNo" required th:value="${department.departmentNo}"
                     placeholder="请输入学院编号" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item row">
                 <label class="layui-form-label">学院</label>
                 <div class="layui-input-block">
-                    <input type="text" name="departmentName" required
+                    <input type="text" name="departmentName" required th:value="${department.departmentName}"
                     placeholder="请输入学院名称" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -45,22 +46,43 @@
 <script th:inline="javascript">
     //<![CDATA[
 
+    let $form = $("#dataForm");
+
     $(function(){
 
     });
 
     //保存
     function saveSubmit(){
-        let validor = $("#dataForm").validate();
+        let validor = $form.validate();
         if (validor.form()){
-            let url = '/teach/college';
-            $.post(url,$("#dataForm").serializeArray(),function (data) {
-                if (data.code === 200){
-                    window.parent.refresh("保存成功");
-                }else {
-                    layer.msg(data.msg,{time:1500,icon:2});
-                }
-            },"json");
+            let id = $("#id").val();
+            if (id !== ''){
+                //id不为空，编辑
+                let url = '/teach/college/'+id;
+                $.ajax({
+                    url:url,
+                    type:'PUT',
+                    data:$form.serializeArray(),
+                    success:function (data) {
+                        if (data.code === 200){
+                            window.parent.refresh(data.msg);
+                        }else {
+                            layer.msg(data.msg,{time:1500,icon:2});
+                        }
+                    }
+                });
+            }else {
+                //id为空，新增
+                let url = '/teach/college';
+                $.post(url,$("#dataForm").serializeArray(),function (data) {
+                    if (data.code === 200){
+                        window.parent.refresh("保存成功");
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                    }
+                },"json");
+            }
         }
     }
     //]]>

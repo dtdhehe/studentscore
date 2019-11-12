@@ -3,6 +3,7 @@ package com.dtdhehe.studentscore.service.impl;
 import com.dtdhehe.studentscore.entity.Department;
 import com.dtdhehe.studentscore.mapper.DepartmentMapper;
 import com.dtdhehe.studentscore.service.DepartmentService;
+import com.dtdhehe.studentscore.util.BeansUtil;
 import com.dtdhehe.studentscore.util.ConstantUtils;
 import com.dtdhehe.studentscore.util.DateUtils;
 import com.github.pagehelper.PageHelper;
@@ -41,9 +42,12 @@ public class DepartmentServiceImpl implements DepartmentService {
             department.setUpdateTime(DateUtils.formatDateTime2());
             return departmentMapper.save(department);
         }else {
-
+            Department oldDepartment = departmentMapper.findById(department.getId());
+            //将不为空的属性拷贝到旧对象中
+            BeansUtil.copyPropertiesIgnoreNull(department,oldDepartment);
+            oldDepartment.setUpdateTime(DateUtils.formatDateTime2());
+            return departmentMapper.update(oldDepartment);
         }
-        return null;
     }
 
     @Override
@@ -51,6 +55,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         Map<String,Object> resultMap = new HashMap<>(8);
         PageHelper.startPage((Integer) queryMap.get("pageNum"),(Integer)queryMap.get("pageSize"));
         List<Department> departmentList = departmentMapper.queryDepartment(queryMap);
+        //修改日期格式
+        for (Department item : departmentList){
+            item.setUpdateTime(DateUtils.convertDateToViewType(item.getUpdateTime(),"datetime"));
+        }
         //总条数
         PageInfo<Department> pageInfo = new PageInfo<>(departmentList);
         int count = (int) pageInfo.getTotal();
@@ -58,5 +66,15 @@ public class DepartmentServiceImpl implements DepartmentService {
         resultMap.put("count",count);
         resultMap.put("list",departmentList);
         return resultMap;
+    }
+
+    @Override
+    public Department findById(String id) {
+        return departmentMapper.findById(id);
+    }
+
+    @Override
+    public Integer delete(String id) {
+        return departmentMapper.delete(id,DateUtils.formatDateTime2());
     }
 }

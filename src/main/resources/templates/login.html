@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>登录界面-简约</title>
+    <title>登录界面</title>
     <link rel="shortcut icon" th:href="@{/image/favicon.ico}"/>
     <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}" >
     <link rel="stylesheet" th:href="@{/css/dialog.css}">
@@ -53,7 +53,13 @@
 <script th:inline="javascript">
     //<![CDATA[
     $(function(){
-
+        $("#loginForm").keydown(function(e) {
+            let event = e || window.event;
+            let code = event.keyCode || event.which || event.charCode;
+            if (code === 13) {
+                onSignBtn();
+            }
+        });
     });
 
     function onSignBtn() {

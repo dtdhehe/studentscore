@@ -20,7 +20,7 @@ public interface DepartmentMapper {
      * @param departmentNo
      * @return
      */
-    @Select("select t.* from department t where t.department_no=#{departmentNo}")
+    @Select("select t.* from department t where t.department_no=#{departmentNo} and t.valid_flag ='1'")
     Department findByNo(@Param("departmentNo") String departmentNo);
 
     /**
@@ -38,4 +38,30 @@ public interface DepartmentMapper {
      */
     @SelectProvider(type = DepartmentMapperProvider.class,method = "queryDepartment")
     List<Department> queryDepartment(Map<String,Object> queryMap);
+
+    /**
+     * 根据学院id查找学院
+     * @param id
+     * @return
+     */
+    @Select("select t.* from department t where t.id=#{id}")
+    Department findById(@Param("id") String id);
+
+    /**
+     * 更新学院
+     * @param department
+     * @return
+     */
+    @Update("update department set update_time=#{updateTime},department_no=#{departmentNo},department_name=#{departmentName} where id=#{id}")
+    Integer update(Department department);
+
+    /**
+     * 删除学院(逻辑删除,将valid_flag置为0)
+     * @param id
+     * @param updateTime
+     * @return
+     */
+    @Update("update department set update_time=#{updateTime},valid_flag='0' where id=#{id}")
+    Integer delete(@Param("id") String id,@Param("updateTime") String updateTime);
+
 }

@@ -1,5 +1,7 @@
 package com.dtdhehe.studentscore.util;
 
+import org.springframework.util.StringUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,6 +40,53 @@ public class DateUtils {
 
     public static String formatDateTime3() {
         return formatDate(now(), "yyyyMMddHHmmss");
+    }
+
+    /**
+     * 将前台yyyy-MM-dd HH:mm:ss或yyyy-MM-dd 转成 yyyyMMddHHmmss 或yyyyMMdd
+     *
+     * @author Wayne
+     * @date 2018/7/25 9:45
+     * @param[date]
+     * @return java.lang.String
+     */
+    public static String convertDateToDBType(String date){
+        String formatDate = "";
+        if(StringUtils.isEmpty(date)){
+            return date;
+        }
+        formatDate = date.replaceAll("\\s|-|:","");
+        return formatDate;
+    }
+
+    /**
+     * 将后台 yyyyMMddHHmmss 或yyyyMMdd 转成 yyyy-MM-dd HH:mm:ss或yyyy-MM-dd
+     *
+     * @author Wayne
+     * @date 2018/7/25 10:24
+     * @param[date]
+     * @return java.lang.String
+     */
+    public static String convertDateToViewType(String date,String dateType){
+        String formateDate="";
+        if(StringUtils.isEmpty(date)){
+            return date;
+        }
+        if("datetime".equals(dateType)){
+            formateDate =  date.substring(0,4)+"-"
+                    +date.substring(4,6)+"-"
+                    +date.substring(6,8)+" "
+                    +date.substring(8,10)+":"
+                    +date.substring(10,12)+":"
+                    +date.substring(12,14);
+            return formateDate;
+        }else if("date".equals(dateType)){
+            formateDate =  date.substring(0,4)+"-"
+                    +date.substring(4,6)+"-"
+                    +date.substring(6,8);
+            return formateDate;
+        }
+        return date;
     }
 
 }
