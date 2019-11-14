@@ -24,7 +24,7 @@ import java.util.Map;
  **/
 @Controller
 @RequestMapping("/teach")
-public class TeachController {
+public class DepartmentController {
 
     @Autowired
     private DepartmentService departmentService;
@@ -99,14 +99,14 @@ public class TeachController {
     }
 
     /**
-     * 查询学院列表
+     * table查询学院列表
      * @param rows
      * @param page
      * @param departmentNo
      * @param departmentName
      * @return
      */
-    @GetMapping("/college")
+    @GetMapping("/queryDepartment")
     @ResponseBody
     public TableModel queryDepartment(@RequestParam("rows") Integer rows,@RequestParam("page") Integer page,
                                       @RequestParam(value = "departmentNo",required = false)String departmentNo,

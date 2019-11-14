@@ -77,4 +77,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Integer delete(String id) {
         return departmentMapper.delete(id,DateUtils.formatDateTime2());
     }
+
+    @Override
+    public List<Department> findAll() {
+        return departmentMapper.findAll();
+    }
 }

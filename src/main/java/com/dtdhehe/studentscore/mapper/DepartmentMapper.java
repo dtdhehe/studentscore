@@ -1,6 +1,7 @@
 package com.dtdhehe.studentscore.mapper;
 
 import com.dtdhehe.studentscore.entity.Department;
+import com.dtdhehe.studentscore.provider.DepartmentMapperProvider;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -63,5 +64,12 @@ public interface DepartmentMapper {
      */
     @Update("update department set update_time=#{updateTime},valid_flag='0' where id=#{id}")
     Integer delete(@Param("id") String id,@Param("updateTime") String updateTime);
+
+    /**
+     * 查询所有学院
+     * @return
+     */
+    @Select("select t.* from department t order by t.department_no asc")
+    List<Department> findAll();
 
 }

@@ -23,26 +23,24 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">编号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required  lay-verify="required" 
+                    <input type="text" name="username" required
                     placeholder="请输入专业编号" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                    <label class="layui-form-label">学院</label>
+                    <label class="layui-form-label" for="departmentSelect">学院</label>
                     <div class="layui-input-block">
-                        <select name="city" lay-verify="">
+                        <select id="departmentSelect" name="city">
                             <option value="">请选择学院</option>
-                            <option value="010">信息工程学院</option>
-                            <option value="021">机电工程学院</option>
-                            <option value="0571">音乐学院</option>
-                        </select> 
+                            <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
+                        </select>
                     </div>
                    
                 </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">专业</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required  lay-verify="required" 
+                    <input type="text" name="username" required
                     placeholder="请输入专业名称" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -57,18 +55,55 @@
 <script th:inline="javascript">
     //<![CDATA[
 
+    let $form = $("#dataForm");
+
     $(function(){
 
     });
 
+    //初始化加载学院下拉框
+    function initSelect() {
+        //1.先查询所有学院
+        let url = '/teach/college';
+        $.get(url,{},function (data) {
+
+        },'data');
+    }
+    
     //保存
     function saveSubmit(){
-        let validor = $("#dataForm").validate();
+        let validor = $form.validate();
         if (validor.form()){
-
+            let id = $("#id").val();
+            if (id !== ''){
+                //id不为空，编辑
+                let url = '/teach/college/'+id;
+                $.ajax({
+                    url:url,
+                    type:'PUT',
+                    data:$form.serializeArray(),
+                    success:function (data) {
+                        if (data.code === 200){
+                            window.parent.refresh(data.msg);
+                        }else {
+                            layer.msg(data.msg,{time:1500,icon:2});
+                        }
+                    }
+                });
+            }else {
+                //id为空，新增
+                let url = '/teach/college';
+                $.post(url,$("#dataForm").serializeArray(),function (data) {
+                    if (data.code === 200){
+                        window.parent.refresh("保存成功");
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                    }
+                },"json");
+            }
         }
-        // layer.alert("保存成功");
     }
+
     //]]>
 </script>
 </body>

@@ -27,13 +27,18 @@
 <body>
     <div id="content">
         <div class="well container">
-            <div class="row select layui-form form">               
-                <div class="col-md-3 layui-form-item"> 
-                    <input type="text" name="title" placeholder="请输入专业名称" autocomplete="off" class="layui-input">   
-                </div>
-                <div  class="col-md-4">
+            <div class="layui-form form">
+                <form id="queryForm" class="row">
+                    <div class="col-md-3">
+                        <input type="text" name="majorNo" placeholder="请输入专业编号" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="majorName" placeholder="请输入专业名称" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="col-md-4">
                         <button type="button" class="layui-btn">搜索</button>
-                </div>    
+                    </div>
+                </form>
             </div>
             <hr>
             <button type="button" class="btn btn-primary" onclick="addDialog()">增加专业</button>
@@ -69,16 +74,19 @@
     $(function(){
         Events.TableInit({
             bootstrapTableId:'#TableList',
-            url:'',
-            option:{
-
-            }
+            url:'/teach/major'
         });
 
     });
 
+    //序号显示格式
+    function xlFormatter(value, row, index) {
+        index = index + 1;
+        return index;
+    }
+
     function addDialog (){
-        var href='./dialog.html';
+        let href='/teach/getMajorInfo';
         layer.open({//iframe层
             type : 2,//用1类型容易出错，建议用2
             id : 'addStudent', //设定一个id，防止重复弹出
@@ -89,7 +97,7 @@
             content : href,
             btn : [ '提交', '关闭' ],
             yes : function(index, layero) {
-                // $(layero).find("iframe")[0].contentWindow.saveSubmit();
+                $(layero).find("iframe")[0].contentWindow.saveSubmit();
             }
         });
     }

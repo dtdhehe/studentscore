@@ -2,6 +2,7 @@ package com.dtdhehe.studentscore.service;
 
 import com.dtdhehe.studentscore.entity.Department;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,4 +47,10 @@ public interface DepartmentService {
      * @return
      */
     Integer delete(String id);
+
+    /**
+     * 查询所有学院
+     * @return
+     */
+    List<Department> findAll();
 }
