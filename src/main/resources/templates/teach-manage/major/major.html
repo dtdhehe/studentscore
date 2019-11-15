@@ -34,7 +34,10 @@
                         <input type="text" name="majorNo" placeholder="请输入专业编号" autocomplete="off" class="layui-input">
                     </div>
                     <div class="col-md-3">
-                        <input type="text" name="departmentName" placeholder="请输入学院名称" autocomplete="off" class="layui-input">
+                        <select name="departmentId">
+                            <option value="">请选择学院</option>
+                            <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
+                        </select>
                     </div>
                     <div class="col-md-3">
                         <input type="text" name="majorName" placeholder="请输入专业名称" autocomplete="off" class="layui-input">

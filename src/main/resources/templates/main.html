@@ -45,7 +45,7 @@
                 <li>
                   <a href="javascript:void (0)" onclick="getMajor()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">专业管理</span></a></li>
                 <li>
-                  <a href="javascript:void (0)" onclick="getClasses()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">班级管理</span></a></li>
+                  <a href="javascript:void (0)" onclick="getGrade()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">班级管理</span></a></li>
                 <li>
                   <a href="javascript:void (0)" onclick="getStaff()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">学科管理</span></a></li>
               </ul>
@@ -103,6 +103,10 @@
       //专业管理页面
       function getMajor() {
           $("#iframe").attr('src','/teach/getMajorManage');
+      }
+      //班级管理页面
+      function getGrade() {
+          $("#iframe").attr('src','/teach/getGradeManage');
       }
       //学生管理页面
       function getStudent() {

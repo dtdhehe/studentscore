@@ -28,8 +28,8 @@ public class MajorMapperProvider {
             if (!StringUtils.isEmpty(queryMap.get("majorName"))){
                 where.append(" and t.major_name like concat('%',#{majorName},'%')");
             }
-            if (!StringUtils.isEmpty(queryMap.get("departmentName"))){
-                where.append(" and d.department_name like concat('%',#{departmentName},'%')");
+            if (!StringUtils.isEmpty(queryMap.get("departmentId"))){
+                where.append(" and t.department_id = #{departmentId}");
             }
         }
         String sql = "select t.*,d.department_name from major t left join department d on t.department_id=d.id where "

@@ -38,7 +38,9 @@ public class MajorController {
      * @return
      */
     @GetMapping("/getMajorManage")
-    public String getMajorManage(){
+    public String getMajorManage(Model model){
+        //查询全部学院
+        model.addAttribute("departmentList",departmentService.findAll());
         return "teach-manage/major/major";
     }
 
@@ -88,14 +90,14 @@ public class MajorController {
     public TableModel queryMajor(@RequestParam("rows") Integer rows, @RequestParam("page") Integer page,
                                  @RequestParam(value = "majorNo",required = false)String majorNo,
                                  @RequestParam(value = "majorName",required = false)String majorName,
-                                 @RequestParam(value = "departmentName",required = false)String departmentName){
+                                 @RequestParam(value = "departmentId",required = false)String departmentId){
         TableModel tableModel = new TableModel();
         Map<String,Object> queryMap = new HashMap<>(8);
         queryMap.put("pageSize",rows);
         queryMap.put("pageNum",page + 1);
         queryMap.put("majorNo",majorNo);
         queryMap.put("majorName",majorName);
-        queryMap.put("departmentName",departmentName);
+        queryMap.put("departmentId",departmentId);
         Map<String,Object> resultMap = majorService.queryMajor(queryMap);
         tableModel.setRows((List) resultMap.get("list"));
         tableModel.setTotal((Integer) resultMap.get("count"));
