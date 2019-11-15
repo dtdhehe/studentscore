@@ -69,7 +69,7 @@ public interface DepartmentMapper {
      * 查询所有学院
      * @return
      */
-    @Select("select t.* from department t order by t.department_no asc")
+    @Select("select t.* from department t where t.valid_flag ='1' order by t.department_no asc")
     List<Department> findAll();
 
 }

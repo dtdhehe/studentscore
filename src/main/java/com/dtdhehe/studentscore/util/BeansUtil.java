@@ -113,6 +113,23 @@ public class BeansUtil {
         }
     }
 
+    /**
+     * 保存公共字段
+     * @param record
+     * @param <T>
+     * @return
+     */
+    public static <T> T addSaveCommonValue(T record) {
+        try {
+            org.apache.commons.beanutils.BeanUtils.setProperty(record,"validFlag",ConstantUtils.ACTIVE);
+            org.apache.commons.beanutils.BeanUtils.setProperty(record,"createTime",DateUtils.formatDateTime2());
+            org.apache.commons.beanutils.BeanUtils.setProperty(record,"updateTime",DateUtils.formatDateTime2());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return record;
+    }
+
     public static void main(String[] args) {
 
     }

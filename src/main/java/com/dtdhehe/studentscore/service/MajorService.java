@@ -2,6 +2,8 @@ package com.dtdhehe.studentscore.service;
 
 import com.dtdhehe.studentscore.entity.Major;
 
+import java.util.Map;
+
 /**
  * @author 陈姗姗
  * @version 1.0.0
@@ -16,5 +18,33 @@ public interface MajorService {
      * @return
      */
     Major findById(String id);
+
+    /**
+     * 根据专业编号查找专业
+     * @param majorNo
+     * @return
+     */
+    Major findByNo(String majorNo);
+
+    /**
+     * 新增/修改专业
+     * @param major
+     * @return
+     */
+    Integer saveOrUpdate(Major major);
+
+    /**
+     * 根据条件查询专业信息
+     * @param queryMap
+     * @return
+     */
+    Map<String,Object> queryMajor(Map<String,Object> queryMap);
+
+    /**
+     * 删除专业
+     * @param id
+     * @return
+     */
+    Integer delete(String id);
 
 }

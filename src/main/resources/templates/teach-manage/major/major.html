@@ -6,6 +6,7 @@
     <title>专业管理</title>
     <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/js/bootstrap-table/css/bootstrap-table.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/font-awesome.min.css}" />
     <link rel="stylesheet" th:href="@{/js/layer/theme/default/layer.css}">
 
     <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
@@ -33,15 +34,18 @@
                         <input type="text" name="majorNo" placeholder="请输入专业编号" autocomplete="off" class="layui-input">
                     </div>
                     <div class="col-md-3">
+                        <input type="text" name="departmentName" placeholder="请输入学院名称" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="col-md-3">
                         <input type="text" name="majorName" placeholder="请输入专业名称" autocomplete="off" class="layui-input">
                     </div>
-                    <div class="col-md-4">
-                        <button type="button" class="layui-btn">搜索</button>
+                    <div class="col-md-3">
+                        <button type="button" class="layui-btn" onclick="search()">搜索</button>
                     </div>
                 </form>
             </div>
             <hr>
-            <button type="button" class="btn btn-primary" onclick="addDialog()">增加专业</button>
+            <button type="button" class="btn btn-primary" onclick="addDialog()">添加专业</button>
             <div class="form-tab">
                 <table id="TableList" class="table"
                     width="100%" style="table-layout:fixed;">
@@ -49,9 +53,10 @@
                         <tr>
                             <th data-width="50" data-field="xl"
                                 data-formatter="xlFormatter" data-show-tip="false">序号</th>
-                            <th data-align="center" data-field="answerTitle" data-show-tip="false">专业编号</th>
-                            <th data-align="center" data-field="answerDate">学院名称</th>
-                            <th data-align="center" data-field="answerDate">专业名称</th>
+                            <th data-align="center" data-field="departmentName">学院名称</th>
+                            <th data-align="center" data-field="majorNo">专业编号</th>
+                            <th data-align="center" data-field="majorName">专业名称</th>
+                            <th data-align="center" data-field="updateTime">修改时间</th>
                             <th data-align="center" data-width="100" data-field="operation"
                                 data-formatter="operation_formatter" data-show-tip="false">操作</th>
                         </tr>
@@ -74,7 +79,7 @@
     $(function(){
         Events.TableInit({
             bootstrapTableId:'#TableList',
-            url:'/teach/major'
+            url:'/teach/queryMajor'
         });
 
     });
@@ -101,6 +106,71 @@
             }
         });
     }
+
+    //搜索
+    function search() {
+        let params = $("#queryForm").serializeObject();
+        //刷新table的数据
+        $("#TableList").bootstrapTable("refresh",{
+            query:params
+        });
+    }
+
+    //列表操作列处理
+    function operation_formatter(value, row, index) {
+        let operation =  "<div class='ibox-tools' style='padding:0; float:none'>";
+        operation = operation + "<a href='javascript:void(0);' onclick='onEditRow(\"" + row.id + "\")' style='padding-top:0;padding-bottom:0;margin-right:3px;padding-left:2px;'><i class='fa fa-pencil'></i></a>";
+        operation = operation + "<a href='javascript:void(0);' onclick='onDeleteRow(\"" + row.id + "\")' style='padding-top:0;padding-bottom:0;margin-right:3px;padding-left:2px;'><i class='fa fa-trash-o'></i></a>";
+        operation = operation  + "</div>";
+        return operation;
+    }
+
+    //编辑
+    function onEditRow(id) {
+        let href='/teach/getMajorInfo?id='+id;
+        layer.open({//iframe层
+            type : 2,//用1类型容易出错，建议用2
+            id : 'addStudent', //设定一个id，防止重复弹出
+            area : [ '400px', '335px' ],
+            fix : false, //不固定
+            title : '编辑专业信息',
+            maxmin : false,
+            content : href,
+            btn : [ '提交', '关闭' ],
+            yes : function(index, layero) {
+                $(layero).find("iframe")[0].contentWindow.saveSubmit();
+            }
+        });
+    }
+
+    //删除
+    function onDeleteRow(id) {
+        layer.confirm("确定要删除选中记录吗？", {
+            btn: ['是', '否']
+        }, function (index) {
+            let url = '/teach/major/'+id;
+            $.ajax({
+                url:url,
+                type:'DELETE',
+                success:function (data) {
+                    if (data.code === 200){
+                        layer.close(index);
+                        $("#TableList").bootstrapTable("refresh");
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                    }
+                }
+            });
+        });
+    }
+
+    //刷新
+    function refresh(msg) {
+        layer.closeAll();
+        $("#TableList").bootstrapTable("refresh");
+        layer.msg(msg, {time:1500, icon:1});
+    }
+
     //]]>
 </script>
 </body>

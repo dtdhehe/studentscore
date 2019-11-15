@@ -77,7 +77,7 @@
                 let url = '/teach/college';
                 $.post(url,$("#dataForm").serializeArray(),function (data) {
                     if (data.code === 200){
-                        window.parent.refresh("保存成功");
+                        window.parent.refresh(data.msg);
                     }else {
                         layer.msg(data.msg,{time:1500,icon:2});
                     }

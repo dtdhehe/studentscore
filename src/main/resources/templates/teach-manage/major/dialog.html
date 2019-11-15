@@ -20,27 +20,27 @@
 <body>
     <div class="body">
         <form class="layui-form form" id="dataForm">
+            <input type="hidden" id="id" name="id" th:value="${major.id}" />
             <div class="layui-form-item">
                 <label class="layui-form-label">编号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required
+                    <input type="text" name="majorNo" required th:value="${major.majorNo}"
                     placeholder="请输入专业编号" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item">
-                    <label class="layui-form-label" for="departmentSelect">学院</label>
-                    <div class="layui-input-block">
-                        <select id="departmentSelect" name="city">
-                            <option value="">请选择学院</option>
-                            <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
-                        </select>
-                    </div>
-                   
+                <label class="layui-form-label" for="departmentSelect">学院</label>
+                <div class="layui-input-block">
+                    <select id="departmentSelect" name="departmentId" th:field="${major.departmentId}">
+                        <option value="">请选择学院</option>
+                        <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
+                    </select>
                 </div>
+            </div>
             <div class="layui-form-item">
                 <label class="layui-form-label">专业</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required
+                    <input type="text" name="majorName" required th:value="${major.majorName}"
                     placeholder="请输入专业名称" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -61,15 +61,6 @@
 
     });
 
-    //初始化加载学院下拉框
-    function initSelect() {
-        //1.先查询所有学院
-        let url = '/teach/college';
-        $.get(url,{},function (data) {
-
-        },'data');
-    }
-    
     //保存
     function saveSubmit(){
         let validor = $form.validate();
@@ -77,7 +68,7 @@
             let id = $("#id").val();
             if (id !== ''){
                 //id不为空，编辑
-                let url = '/teach/college/'+id;
+                let url = '/teach/major/'+id;
                 $.ajax({
                     url:url,
                     type:'PUT',
@@ -92,10 +83,10 @@
                 });
             }else {
                 //id为空，新增
-                let url = '/teach/college';
+                let url = '/teach/major';
                 $.post(url,$("#dataForm").serializeArray(),function (data) {
                     if (data.code === 200){
-                        window.parent.refresh("保存成功");
+                        window.parent.refresh(data.msg);
                     }else {
                         layer.msg(data.msg,{time:1500,icon:2});
                     }

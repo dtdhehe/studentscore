@@ -23,4 +23,6 @@ public class Major {
     private String majorNo;
 
     private String majorName;
+
+    private String departmentName;
 }

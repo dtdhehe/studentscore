@@ -37,9 +37,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Integer saveOrUpdate(Department department) {
         if (StringUtils.isEmpty(department.getId())){
             department.setId(ConstantUtils.getUniqueKey());
-            department.setValidFlag(ConstantUtils.ACTIVE);
-            department.setCreateTime(DateUtils.formatDateTime2());
-            department.setUpdateTime(DateUtils.formatDateTime2());
+            BeansUtil.addSaveCommonValue(department);
             return departmentMapper.save(department);
         }else {
             Department oldDepartment = departmentMapper.findById(department.getId());

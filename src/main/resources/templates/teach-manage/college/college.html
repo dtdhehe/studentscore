@@ -104,6 +104,7 @@
         });
     }
 
+    //搜索
     function search() {
         let params = $("#queryForm").serializeObject();
         //刷新table的数据
@@ -129,7 +130,7 @@
             id : 'addStudent', //设定一个id，防止重复弹出
             area : [ '400px', '235px' ],
             fix : false, //不固定
-            title : '新增学院',
+            title : '编辑学院信息',
             maxmin : false,
             content : href,
             btn : [ '提交', '关闭' ],
