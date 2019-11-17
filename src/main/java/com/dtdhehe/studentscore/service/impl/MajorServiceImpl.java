@@ -75,4 +75,12 @@ public class MajorServiceImpl implements MajorService {
     public Integer delete(String id) {
         return majorMapper.delete(id,DateUtils.formatDateTime2());
     }
+
+    @Override
+    public List<Major> findByDepartmentId(String id) {
+        if (!StringUtils.isEmpty(id)){
+            return majorMapper.findByDepartmentId(id);
+        }
+        return null;
+    }
 }

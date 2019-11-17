@@ -122,7 +122,7 @@ public class MajorController {
     }
 
     /**
-     * 删除学院
+     * 删除专业
      * @param id
      * @return
      */
@@ -131,6 +131,18 @@ public class MajorController {
     public ResultVO deleteMajor(@PathVariable("id") String id){
         Integer result = majorService.delete(id);
         return result.equals(ConstantUtils.SUCCESS)?ResultUtils.success("删除成功"):ResultUtils.failed("删除失败,请重新删除");
+    }
+
+    /**
+     * 根据学院id查询所有专业
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}/major")
+    @ResponseBody
+    public ResultVO getMajorByDepartmentId(@PathVariable("id") String id){
+        List<Major> majorList = majorService.findByDepartmentId(id);
+        return (majorList != null)?ResultUtils.success("查询成功",majorList):ResultUtils.failed("查询失败");
     }
 
 }

@@ -21,14 +21,14 @@
     <div class="body">
         <form class="layui-form form" id="dataForm">
             <input type="hidden" id="id" name="id" th:value="${major.id}" />
-            <div class="layui-form-item">
+            <div class="layui-form-item row">
                 <label class="layui-form-label">编号</label>
                 <div class="layui-input-block">
                     <input type="text" name="majorNo" required th:value="${major.majorNo}"
                     placeholder="请输入专业编号" autocomplete="off" class="layui-input">
                 </div>
             </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item row">
                 <label class="layui-form-label" for="departmentSelect">学院</label>
                 <div class="layui-input-block">
                     <select id="departmentSelect" name="departmentId" th:field="${major.departmentId}">
@@ -37,7 +37,7 @@
                     </select>
                 </div>
             </div>
-            <div class="layui-form-item">
+            <div class="layui-form-item row">
                 <label class="layui-form-label">专业</label>
                 <div class="layui-input-block">
                     <input type="text" name="majorName" required th:value="${major.majorName}"

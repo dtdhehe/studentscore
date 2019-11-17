@@ -20,39 +20,36 @@
 <body>
     <div class="body">
         <form class="layui-form form" id="dataForm">
-            <div class="layui-form-item">
-                <label class="layui-form-label">编号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required  lay-verify="required" 
-                    placeholder="请输入班级编号" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
+            <input type="hidden" id="id" name="id" th:value="${grade.id}" />
+            <div class="layui-form-item row">
                 <label class="layui-form-label">学院</label>
                 <div class="layui-input-block">
-                    <select name="city" lay-verify="">
+                    <select id="departmentSelect" name="departmentId" lay-filter="department"
+                            th:field="${grade.departmentId}">
                         <option value="">请选择学院</option>
-                        <option value="010">信息工程学院</option>
-                        <option value="021">机电工程学院</option>
-                        <option value="0571">音乐学院</option>
-                    </select> 
+                        <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
+                    </select>
                 </div>
             </div>
-            <div class="layui-form-item">
-                    <label class="layui-form-label">专业</label>
-                    <div class="layui-input-block">
-                        <select name="city" lay-verify="">
-                            <option value="">请选择专业</option>
-                            <option value="010">电信工程</option>
-                            <option value="021">互联网</option>
-                            <option value="0571">计算机科学与技术</option>
-                        </select> 
-                    </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">专业</label>
+                <div class="layui-input-block">
+                    <select id="majorSelect" name="majorId">
+                        <option value="">请选择专业</option>
+                    </select>
                 </div>
-            <div class="layui-form-item">
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">编号</label>
+                <div class="layui-input-block">
+                    <input type="number" name="gradeNum" required th:value="${grade.gradeNum}"
+                           placeholder="请输入班级编号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item row">
                 <label class="layui-form-label">班级</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required  lay-verify="required" 
+                    <input type="text" name="gradeName" required th:value="${grade.gradeName}"
                     placeholder="请输入班级名称" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -67,17 +64,85 @@
 <script th:inline="javascript">
     //<![CDATA[
 
-    $(function(){
+    let $form = $("#dataForm");
 
+    $(function(){
+        initMajorSelect([[${grade.departmentId}]]);
     });
+
+    //监听form
+    function initForm() {
+        layui.use('form', function(){
+            let form = layui.form;
+            $("#majorSelect").val([[${grade.majorId}]]);
+            form.render();
+            //学院下拉框切换事件
+            form.on('select(department)', function(data){
+                //如果学院不为空,则渲染专业下拉框
+                data.value !== '' && initMajorSelect(data.value);
+            });
+        });
+    }
+
+    //渲染专业下拉框
+    function initMajorSelect(departmentId) {
+        let url = '/teach/' + departmentId + '/major';
+        $.get(url,{},function (data) {
+            if (data.code === 200){
+                let majorList = data.data;
+                //先清空之前的选项
+                $("#majorSelect").empty();
+                $("#majorSelect").append('<option value="">请选择专业</option>');
+                for (let item of majorList){
+                    let options = '<option value="'+item.id+'">'+item.majorName+'</option>';
+                    $("#majorSelect").append(options);
+                }
+                initForm();
+            }else {
+                layer.msg(data.msg,{time:1500,icon:2});
+            }
+        },"json");
+    }
 
     //保存
     function saveSubmit(){
-        let validor = $("#dataForm").validate();
-        if (validor.form()){
-
+        let validor = $form.validate();
+        //校验是否选择了专业和学院
+        let departmentId = $("#departmentSelect").val();
+        let majorId = $("#majorSelect").val();
+        if (departmentId === '' || majorId === ''){
+            layer.msg("请选择学院或专业",{time:1500,icon:2});
+            return;
         }
-        // layer.alert("保存成功");
+        if (validor.form()){
+            let id = $("#id").val();
+            if (id !== ''){
+                //id不为空，编辑
+                let url = '/teach/grade/'+id;
+                $.ajax({
+                    url:url,
+                    type:'PUT',
+                    data:$form.serializeArray(),
+                    success:function (data) {
+                        if (data.code === 200){
+                            window.parent.refresh(data.msg);
+                        }else {
+                            layer.msg(data.msg,{time:1500,icon:2});
+                        }
+                    }
+                });
+            }else {
+                //id为空，新增
+                let url = '/teach/grade';
+                $.post(url,$("#dataForm").serializeArray(),function (data) {
+                    if (data.code === 200){
+                        window.parent.refresh(data.msg);
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                    }
+                },"json");
+            }
+        }
     }
     //]]>
 </script>

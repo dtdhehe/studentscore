@@ -65,4 +65,12 @@ public interface MajorMapper {
     @Update("update major set update_time=#{updateTime},valid_flag='0' where id=#{id}")
     Integer delete(@Param("id") String id,@Param("updateTime") String updateTime);
 
+    /**
+     * 根据学院id查询所有专业
+     * @param id
+     * @return
+     */
+    @Select("select t.* from major t left join department d on t.department_id=d.id where d.id=#{id} and t.valid_flag='1'")
+    List<Major> findByDepartmentId(@Param("id") String id);
+
 }

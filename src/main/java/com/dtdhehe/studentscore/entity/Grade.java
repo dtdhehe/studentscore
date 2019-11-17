@@ -18,6 +18,8 @@ public class Grade {
 
     private String updateTime;
 
+    private String departmentId;
+
     private String majorId;
 
     private Integer gradeNum;
