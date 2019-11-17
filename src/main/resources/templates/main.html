@@ -40,13 +40,13 @@
             <div class="sBox">
               <div class="subNav sublist-down"><span class="title-icon glyphicon glyphicon-chevron-down"></span><span class="sublist-title">教学管理</span></div>
               <ul class="navContent" style="display:block">
-                <li class="active">
+                <li class="active" onclick="changeBar(this)">
                   <a href="javascript:void (0)" onclick="getDepartment()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">学院管理</span></a></li>
-                <li>
+                <li onclick="changeBar(this)">
                   <a href="javascript:void (0)" onclick="getMajor()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">专业管理</span></a></li>
-                <li>
+                <li onclick="changeBar(this)">
                   <a href="javascript:void (0)" onclick="getGrade()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">班级管理</span></a></li>
-                <li>
+                <li onclick="changeBar(this)">
                   <a href="javascript:void (0)" onclick="getStaff()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">学科管理</span></a></li>
               </ul>
             </div>
@@ -54,26 +54,31 @@
               <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">人员管理</span>
               </div>
               <ul class="navContent" style="display:none">
-                <li>
+                <li onclick="changeBar(this)">
                   <a href="javascript:void (0)" onclick="getStudent()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">学生管理</span></a> </li>
-                <li>
-                <li>
+                <li onclick="changeBar(this)">
                   <a href="#"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">教师管理</span></a> </li>
-                <li>
               </ul>
             </div>
             <div class="sBox">
               <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">成绩管理</span></div>
               <ul class="navContent" style="display:none">
-                <li>
+                <li onclick="changeBar(this)">
                   <a href="#"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">成绩统计表</span></a></li>
               </ul>
             </div>
             <div class="sBox">
               <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">个人管理</span></div>
               <ul class="navContent" style="display:none">
-                <li>
+                <li onclick="changeBar(this)">
                   <a href="#"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">个人信息维护</span></a></li>
+              </ul>
+            </div>
+            <div class="sBox">
+              <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">轮播图管理</span></div>
+              <ul class="navContent" style="display:none">
+                <li onclick="changeBar(this)">
+                  <a href="#"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">轮播图</span></a></li>
               </ul>
             </div>
           </div>
@@ -111,6 +116,12 @@
       //学生管理页面
       function getStudent() {
         $("#iframe").attr('src','/staff/student');
+      }
+
+      //切换导航栏样式
+      function changeBar (e){
+          $(".sBox ul li").removeClass('active');
+          $(e).addClass('active');
       }
       
       //]]>
