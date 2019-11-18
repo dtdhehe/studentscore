@@ -23,28 +23,33 @@
             <div class="layui-form-item row">
                 <label class="layui-form-label">学院</label>
                 <div class="layui-input-block">
-                    <input type="text" name="college" required
-                           placeholder="请输入学生学院" autocomplete="off" class="layui-input">
+                    <select id="departmentSelect" name="departmentId" lay-filter="department"
+                            th:field="${student.departmentId}">
+                        <option value="">请选择学院</option>
+                        <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item row">
                 <label class="layui-form-label">专业</label>
                 <div class="layui-input-block">
-                    <input type="text" name="major" required
-                           placeholder="请输入学生专业" autocomplete="off" class="layui-input">
+                    <select id="majorSelect" name="majorId" lay-filter="major">
+                        <option value="">请选择专业</option>
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item row">
                 <label class="layui-form-label">班级</label>
                 <div class="layui-input-block">
-                    <input type="text" name="class" required
-                           placeholder="请输入学生班级" autocomplete="off" class="layui-input">
+                    <select id="gradeSelect" name="gradeId">
+                        <option value="">请选择班级</option>
+                    </select>
                 </div>
             </div>
             <div class="layui-form-item row">
                 <label class="layui-form-label">学号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="sno" required
+                    <input type="number" name="sno" required
                            placeholder="请输入学生学号" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -53,13 +58,6 @@
                 <div class="layui-input-block">
                     <input type="text" name="userName" required autocomplete="off"
                     placeholder="请输入学生姓名"  class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item row">
-                <label class="layui-form-label">性别</label>
-                <div class="layui-input-block">
-                    <input type="radio" name="sex" value="1" title="男">
-                    <input type="radio" name="sex" value="2" title="女" checked>
                 </div>
             </div>
         </form>
@@ -73,17 +71,111 @@
 <script th:inline="javascript">
     //<![CDATA[
 
-    $(function(){
+    let $form = $("#dataForm");
 
+    $(function(){
+        initMajorSelect([[${student.departmentId}]]);
+        initGradeSelect([[${student.departmentId}]]);
     });
+
+    //监听form
+    function initForm() {
+        layui.use('form', function(){
+            let form = layui.form;
+            form.render();
+            //学院下拉框切换事件
+            form.on('select(department)', function(data){
+                //如果学院不为空,则渲染专业下拉框
+                data.value !== '' && initMajorSelect(data.value);
+            });
+            //专业下拉框切换事件
+            form.on('select(major)', function(data){
+                //如果专业不为空,则渲染班级下拉框
+                data.value !== '' && initGradeSelect(data.value);
+            });
+        });
+    }
+
+    //渲染专业下拉框
+    function initMajorSelect(departmentId) {
+        let url = '/teach/' + departmentId + '/major';
+        $.get(url,{},function (data) {
+            if (data.code === 200){
+                let majorList = data.data;
+                //先清空之前的选项
+                $("#majorSelect").empty();
+                $("#majorSelect").append('<option value="">请选择专业</option>');
+                for (let item of majorList){
+                    let options = '<option value="'+item.id+'">'+item.majorName+'</option>';
+                    $("#majorSelect").append(options);
+                }
+                initForm();
+            }else {
+                layer.msg(data.msg,{time:1500,icon:2});
+            }
+        },"json");
+    }
+
+    //渲染班级下拉框
+    function initGradeSelect(majorId) {
+        let url = '/teach/' + majorId + '/grade';
+        $.get(url,{},function (data) {
+            if (data.code === 200){
+                let majorList = data.data;
+                //先清空之前的选项
+                $("#gradeSelect").empty();
+                $("#gradeSelect").append('<option value="">请选择班级</option>');
+                for (let item of majorList){
+                    let options = '<option value="'+item.id+'">'+item.gradeName+'</option>';
+                    $("#gradeSelect").append(options);
+                }
+                initForm();
+            }else {
+                layer.msg(data.msg,{time:1500,icon:2});
+            }
+        },"json");
+    }
 
     //保存
     function saveSubmit(){
-        let validor = $("#dataForm").validate();
-        if (validor.form()){
-
+        let validor = $form.validate();
+        //校验是否选择了专业和学院
+        let departmentId = $("#departmentSelect").val();
+        let majorId = $("#majorSelect").val();
+        let gradeId = $("#gradeSelect").val();
+        if (departmentId === '' || majorId === '' || gradeId === ''){
+            layer.msg("请选择下拉框",{time:1500,icon:2});
+            return;
         }
-        // layer.alert("保存成功");
+        if (validor.form()){
+            let id = $("#id").val();
+            if (id !== ''){
+                //id不为空，编辑
+                let url = '/staff/student/'+id;
+                $.ajax({
+                    url:url,
+                    type:'PUT',
+                    data:$form.serializeArray(),
+                    success:function (data) {
+                        if (data.code === 200){
+                            window.parent.refresh(data.msg);
+                        }else {
+                            layer.msg(data.msg,{time:1500,icon:2});
+                        }
+                    }
+                });
+            }else {
+                //id为空，新增
+                let url = '/staff/student';
+                $.post(url,$("#dataForm").serializeArray(),function (data) {
+                    if (data.code === 200){
+                        window.parent.refresh(data.msg);
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                    }
+                },"json");
+            }
+        }
     }
     //]]>
 </script>
