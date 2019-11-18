@@ -76,4 +76,12 @@ public class GradeServiceImpl implements GradeService {
     public Integer delete(String id) {
         return null;
     }
+
+    @Override
+    public List<Grade> findByMajorId(String majorId) {
+        if (!StringUtils.isEmpty(majorId)){
+            return gradeMapper.findByMajorId(majorId);
+        }
+        return null;
+    }
 }

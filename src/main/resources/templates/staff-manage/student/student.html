@@ -6,6 +6,7 @@
     <title>学生管理</title>
     <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/js/bootstrap-table/css/bootstrap-table.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/font-awesome.min.css}" />
     <link rel="stylesheet" th:href="@{/js/layer/theme/default/layer.css}">
 
     <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
@@ -15,41 +16,32 @@
     <div id="content">
         <div class="well container">
             <div class="row select layui-form form">
-                <div class="col-md-2 layui-form-item">
-                    <select name="city" lay-verify="">
-                        <option value="">学院</option>
-                        <option value="010">信息工程学院</option>
-                        <option value="021">机电工程学院</option>
-                        <option value="0571">音乐学院</option>
+                <div class="col-md-3">
+                    <select name="departmentId" lay-filter="department">
+                        <option value="">请选择学院</option>
+                        <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="majorSelect" name="majorId" lay-filter="major">
+                        <option value="">请选择专业</option>
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select name="city" lay-verify="">
-                        <option value="">专业</option>
-                        <option value="010">电子信息工程</option>
-                        <option value="021">计算机科学与技术</option>
-                        <option value="0571">通信工程</option>
-                        <option value="0571">互联网工程</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select name="city" lay-verify="">
-                        <option value="">班级</option>
-                        <option value="010">电信151</option>
-                        <option value="021">电信152</option>
-                        <option value="0571">电信153</option>
+                    <select id="gradeSelect" name="gradeId" lay-filter="grade">
+                        <option value="">请选择班级</option>
                     </select>
                 </div>
                 <div class="col-md-2">
                     <input type="text" name="title" placeholder="请输入学生名字" autocomplete="off" class="layui-input">
 
                 </div>
-                <div  class="col-md-4">
+                <div  class="col-md-2">
                     <button type="button" class="layui-btn">搜索</button>
                 </div>
             </div>
             <hr>
-            <button type="button" class="btn btn-primary" onclick="addDialog()">增加学生</button>
+            <button type="button" class="btn btn-primary" onclick="addDialog()">添加学生</button>
             <div class="form-tab">
                 <table id="TableList" class="table"
                     width="100%" style="table-layout:fixed;">
@@ -73,45 +65,101 @@
         </div>
     </div>
    
-    <script th:src="@{/js/jquery-2.1.1.min.js}"></script>
-    <script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
-    <script th:src="@{/js/bootstrap-table/js/bootstrap-table.js}"></script>
-    <script th:src="@{/js/bootstrap-table/js/bootstrap-table-zh-CN.js}"></script>
-    <script th:src="@{/js/layui/layui.all.js}"></script>
-    <script th:src="@{/js/layer/layer.js}"></script>
-    <script th:src="@{/js/public/table-init.js}"></script>
+<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-table/js/bootstrap-table.js}"></script>
+<script th:src="@{/js/bootstrap-table/js/bootstrap-table-zh-CN.js}"></script>
+<script th:src="@{/js/layui/layui.all.js}"></script>
+<script th:src="@{/js/layer/layer.js}"></script>
+<script th:src="@{/js/public/table-init.js}"></script>
 
-    <script th:inline="javascript">
-        //<![CDATA[
-        $(function(){
-            Events.TableInit({
-                bootstrapTableId:'#TableList',
-                url:'',
-                option:{
-
-                }
-            });
-        
+<script th:inline="javascript">
+    //<![CDATA[
+    $(function(){
+        Events.TableInit({
+            bootstrapTableId:'#TableList',
+            url:''
         });
+        initForm();
+    });
 
-        function addDialog (){
-            let href='/staff/student/dialog';
-            layer.open({//iframe层
-                type : 2,//用1类型容易出错，建议用2
-                id : 'addStudent', //设定一个id，防止重复弹出
-                area : [ '500px', '525px' ],
-                fix : false, //不固定
-                title : '新增学生',
-                maxmin : false,
-                content : href,
-                btn : [ '提交', '关闭' ],
-                yes : function(index, layero) {
-                    $(layero).find("iframe")[0].contentWindow.saveSubmit();
-                }
+    //监听form
+    function initForm() {
+        layui.use('form', function(){
+            let form = layui.form;
+            form.render();
+            //学院下拉框切换事件
+            form.on('select(department)', function(data){
+                //如果学院不为空,则渲染专业下拉框
+                data.value !== '' && initMajorSelect(data.value);
             });
-        }
+            //专业下拉框切换事件
+            form.on('select(major)', function(data){
+                //如果专业不为空,则渲染班级下拉框
+                data.value !== '' && initGradeSelect(data.value);
+            });
+        });
+    }
 
-        //]]>
-    </script>
+    //渲染专业下拉框
+    function initMajorSelect(departmentId) {
+        let url = '/teach/' + departmentId + '/major';
+        $.get(url,{},function (data) {
+            if (data.code === 200){
+                let majorList = data.data;
+                //先清空之前的选项
+                $("#majorSelect").empty();
+                $("#majorSelect").append('<option value="">请选择专业</option>');
+                for (let item of majorList){
+                    let options = '<option value="'+item.id+'">'+item.majorName+'</option>';
+                    $("#majorSelect").append(options);
+                }
+                initForm();
+            }else {
+                layer.msg(data.msg,{time:1500,icon:2});
+            }
+        },"json");
+    }
+
+    //渲染班级下拉框
+    function initGradeSelect(majorId) {
+        let url = '/teach/' + majorId + '/grade';
+        $.get(url,{},function (data) {
+            if (data.code === 200){
+                let majorList = data.data;
+                //先清空之前的选项
+                $("#gradeSelect").empty();
+                $("#gradeSelect").append('<option value="">请选择班级</option>');
+                for (let item of majorList){
+                    let options = '<option value="'+item.id+'">'+item.gradeName+'</option>';
+                    $("#gradeSelect").append(options);
+                }
+                initForm();
+            }else {
+                layer.msg(data.msg,{time:1500,icon:2});
+            }
+        },"json");
+    }
+
+    //添加学生
+    function addDialog (){
+        let href='/staff/getStudentInfo';
+        layer.open({//iframe层
+            type : 2,//用1类型容易出错，建议用2
+            id : 'addStudent', //设定一个id，防止重复弹出
+            area : [ '500px', '525px' ],
+            fix : false, //不固定
+            title : '新增学生',
+            maxmin : false,
+            content : href,
+            btn : [ '提交', '关闭' ],
+            yes : function(index, layero) {
+                $(layero).find("iframe")[0].contentWindow.saveSubmit();
+            }
+        });
+    }
+
+    //]]>
+</script>
 </body>
 </html>

@@ -66,4 +66,11 @@ public interface GradeMapper {
     @Update("update grade set update_time=#{updateTime},valid_flag='0' where id=#{id}")
     Integer delete(@Param("id") String id,@Param("updateTime") String updateTime);
 
+    /**
+     * 根据专业id查询所有班级
+     * @param majorId
+     * @return
+     */
+    @Select("select t.* from grade t where t.major_id=#{majorId} and t.valid_flag='1'")
+    List<Grade> findByMajorId(@Param("majorId") String majorId);
 }

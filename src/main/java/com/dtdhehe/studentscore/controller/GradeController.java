@@ -122,4 +122,28 @@ public class GradeController {
         return tableModel;
     }
 
+    /**
+     * 删除专业
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/grade/{id}")
+    @ResponseBody
+    public ResultVO deleteGrade(@PathVariable("id") String id){
+        Integer result = gradeService.delete(id);
+        return result.equals(ConstantUtils.SUCCESS)?ResultUtils.success("删除成功"):ResultUtils.failed("删除失败,请重新删除");
+    }
+
+    /**
+     * 根据专业id查询所有班级
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}/grade")
+    @ResponseBody
+    public ResultVO getGradeByMajorId(@PathVariable("id") String id){
+        List<Grade> gradeList = gradeService.findByMajorId(id);
+        return (gradeList != null)?ResultUtils.success("查询成功",gradeList):ResultUtils.failed("查询失败");
+    }
+
 }

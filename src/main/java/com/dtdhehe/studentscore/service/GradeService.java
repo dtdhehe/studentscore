@@ -2,6 +2,7 @@ package com.dtdhehe.studentscore.service;
 
 import com.dtdhehe.studentscore.entity.Grade;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,4 +47,12 @@ public interface GradeService {
      * @return
      */
     Integer delete(String id);
+
+    /**
+     * 根据专业id查询所有班级
+     * @param majorId
+     * @return
+     */
+    List<Grade> findByMajorId(String majorId);
+
 }
