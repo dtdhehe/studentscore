@@ -47,7 +47,7 @@
                 <li onclick="changeBar(this)">
                   <a href="javascript:void (0)" onclick="getGrade()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">班级管理</span></a></li>
                 <li onclick="changeBar(this)">
-                  <a href="javascript:void (0)" onclick="getStaff()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">学科管理</span></a></li>
+                  <a href="javascript:void (0)" onclick="getSubject()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">学科管理</span></a></li>
               </ul>
             </div>
             <div class="sBox">
@@ -57,28 +57,28 @@
                 <li onclick="changeBar(this)">
                   <a href="javascript:void (0)" onclick="getStudent()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">学生管理</span></a> </li>
                 <li onclick="changeBar(this)">
-                  <a href="#"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">教师管理</span></a> </li>
+                  <a href="javascript:void (0)" onclick="getTeacher()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">教师管理</span></a> </li>
               </ul>
             </div>
             <div class="sBox">
               <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">成绩管理</span></div>
               <ul class="navContent" style="display:none">
                 <li onclick="changeBar(this)">
-                  <a href="#"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">成绩统计表</span></a></li>
+                  <a href="javascript:void (0)" onclick="getScore()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">成绩统计表</span></a></li>
               </ul>
             </div>
             <div class="sBox">
               <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">个人管理</span></div>
               <ul class="navContent" style="display:none">
                 <li onclick="changeBar(this)">
-                  <a href="#"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">个人信息维护</span></a></li>
+                  <a href="javascript:void (0)" onclick="getPersonal()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">个人信息维护</span></a></li>
               </ul>
             </div>
             <div class="sBox">
               <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">轮播图管理</span></div>
               <ul class="navContent" style="display:none">
                 <li onclick="changeBar(this)">
-                  <a href="#"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">轮播图</span></a></li>
+                  <a href="javascript:void (0)" onclick="getSetting()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">轮播图</span></a></li>
               </ul>
             </div>
           </div>
@@ -113,9 +113,29 @@
       function getGrade() {
           $("#iframe").attr('src','/teach/getGradeManage');
       }
+      //学科管理页面
+      function getSubject() {
+          $("#iframe").attr('src','/teach/getSubjectManage');
+      }
       //学生管理页面
       function getStudent() {
         $("#iframe").attr('src','/staff/student');
+      }
+      //教室管理页面
+      function getTeacher() {
+
+      }
+      //成绩管理页面
+      function getScore() {
+
+      }
+      //个人信息页面
+      function getPersonal() {
+
+      }
+      //首页设置
+      function getSetting() {
+          
       }
 
       //切换导航栏样式
