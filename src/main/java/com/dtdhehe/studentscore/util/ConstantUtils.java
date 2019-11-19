@@ -1,5 +1,7 @@
 package com.dtdhehe.studentscore.util;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -16,6 +18,15 @@ public class ConstantUtils {
     public static final Integer ERROR = 0;
     public static final Integer SUCCESS = 1;
     public static final Integer FAILED = 2;
+    public static final String ADMIN = "0";
+    public static final String TEACHER = "1";
+    public static final String STUDENT = "2";
+    public static final Map<String,String> ROLE_MAP = new HashMap<>();
+    static {
+        ROLE_MAP.put(ConstantUtils.ADMIN,"admin");
+        ROLE_MAP.put(ConstantUtils.TEACHER,"teacher");
+        ROLE_MAP.put(ConstantUtils.STUDENT,"student");
+    }
 
     /**
      * 随机获得主键

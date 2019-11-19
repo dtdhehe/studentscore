@@ -83,8 +83,11 @@
     function initForm() {
         layui.use('form', function(){
             let form = layui.form;
-            $("#majorSelect").val([[${student.majorId}]]);
-            $("#gradeSelect").val([[${student.gradeId}]]);
+            let majorId = [[${student.majorId}]] || '';
+            let gradeId = [[${student.gradeId}]] || '';
+            //不为空，则渲染下拉框
+            majorId !== '' && $("#majorSelect").val([[${student.majorId}]]);
+            gradeId !== '' && $("#gradeSelect").val([[${student.gradeId}]]);
             form.render();
             //学院下拉框切换事件
             form.on('select(department)', function(data){

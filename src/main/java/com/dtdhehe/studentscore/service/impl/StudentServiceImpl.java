@@ -62,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
             //默认用户名和密码都是学号
             user.setPassword(PasswordUtils.getPWD(student.getSno(),user.getUserName()));
             //学生身份
-            user.setStatus("2");
+            user.setStatus(ConstantUtils.STUDENT);
             Integer integer = userMapper.save(user);
             if (integer.equals(ConstantUtils.SUCCESS)){
                 //新增用户时，同时保存用户-权限表
@@ -71,7 +71,7 @@ public class StudentServiceImpl implements StudentService {
                 BeansUtil.addSaveCommonValue(userRole);
                 userRole.setUserId(user.getId());
                 //根据用户标识查询权限id
-                Role role = roleMapper.findByRoleName(user.getStatus());
+                Role role = roleMapper.findByRoleName(ConstantUtils.ROLE_MAP.get(user.getStatus()));
                 userRole.setRoleId(role.getId());
                 roleMapper.saveUserRole(userRole);
                 //保存用户id到学生表
