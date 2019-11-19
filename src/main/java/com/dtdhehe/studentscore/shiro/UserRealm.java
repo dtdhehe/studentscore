@@ -1,5 +1,6 @@
 package com.dtdhehe.studentscore.shiro;
 
+import com.dtdhehe.studentscore.entity.Role;
 import com.dtdhehe.studentscore.entity.User;
 import com.dtdhehe.studentscore.service.UserService;
 import com.dtdhehe.studentscore.util.ConstantUtils;
@@ -10,6 +11,10 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author 陈珊珊
@@ -33,7 +38,12 @@ public class UserRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         User user = (User) principalCollection.getPrimaryPrincipal();
         //授权
-
+        Set<String> roles =new HashSet<>();
+        List<Role> roleList = user.getRoleList();
+        for (Role role : roleList){
+            roles.add(role.getRoleName());
+        }
+        authorizationInfo.setRoles(roles);
         return authorizationInfo;
     }
 
