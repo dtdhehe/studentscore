@@ -74,7 +74,7 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public Integer delete(String id) {
-        return null;
+        return gradeMapper.delete(id,DateUtils.formatDateTime2());
     }
 
     @Override

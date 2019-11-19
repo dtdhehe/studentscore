@@ -1,8 +1,12 @@
 package com.dtdhehe.studentscore.service.impl;
 
+import com.dtdhehe.studentscore.entity.Role;
 import com.dtdhehe.studentscore.entity.User;
+import com.dtdhehe.studentscore.entity.UserRole;
+import com.dtdhehe.studentscore.mapper.RoleMapper;
 import com.dtdhehe.studentscore.mapper.UserMapper;
 import com.dtdhehe.studentscore.service.UserService;
+import com.dtdhehe.studentscore.util.BeansUtil;
 import com.dtdhehe.studentscore.util.ConstantUtils;
 import com.dtdhehe.studentscore.util.DateUtils;
 import com.dtdhehe.studentscore.util.PasswordUtils;
@@ -21,6 +25,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RoleMapper roleMapper;
 
     @Override
     public User findByUserName(String userName) {
@@ -34,10 +40,25 @@ public class UserServiceImpl implements UserService {
             user.setId(ConstantUtils.getUniqueKey());
             //取用户名作为加密盐
             user.setPassword(PasswordUtils.getPWD(user.getPassword(),user.getUserName()));
-            user.setValidFlag(ConstantUtils.NOTACTIVE);
+            if (StringUtils.isEmpty(user.getValidFlag())){
+                user.setValidFlag(ConstantUtils.NOTACTIVE);
+            }
             user.setCreateTime(DateUtils.formatDateTime2());
             user.setUpdateTime(DateUtils.formatDateTime2());
-            return userMapper.save(user);
+            //新增用户时，同时保存用户-权限表
+            UserRole userRole = new UserRole();
+            userRole.setId(ConstantUtils.getUniqueKey());
+            BeansUtil.addSaveCommonValue(userRole);
+            userRole.setUserId(user.getId());
+            //根据用户标识查询权限id
+            Role role = roleMapper.findByRoleName(user.getStatus());
+            userRole.setRoleId(role.getId());
+            Integer result = roleMapper.saveUserRole(userRole);
+            if (result.equals(ConstantUtils.SUCCESS)){
+                return userMapper.save(user);
+            }else {
+                return 0;
+            }
         }else {
             //TODO 修改用户
         }

@@ -20,6 +20,7 @@
 <body>
     <div class="body">
         <form id="dataForm" class="layui-form from">
+            <input type="hidden" id="id" name="id" th:value="${student.id}" />
             <div class="layui-form-item row">
                 <label class="layui-form-label">学院</label>
                 <div class="layui-input-block">
@@ -49,15 +50,15 @@
             <div class="layui-form-item row">
                 <label class="layui-form-label">学号</label>
                 <div class="layui-input-block">
-                    <input type="number" name="sno" required
+                    <input type="number" name="sno" required th:value="${student.sno}"
                            placeholder="请输入学生学号" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item row">
                 <label class="layui-form-label">姓名</label>
                 <div class="layui-input-block">
-                    <input type="text" name="userName" required autocomplete="off"
-                    placeholder="请输入学生姓名"  class="layui-input">
+                    <input type="text" name="name" required th:value="${student.name}"
+                           placeholder="请输入学生姓名" autocomplete="off" class="layui-input">
                 </div>
             </div>
         </form>
@@ -75,13 +76,15 @@
 
     $(function(){
         initMajorSelect([[${student.departmentId}]]);
-        initGradeSelect([[${student.departmentId}]]);
+        initGradeSelect([[${student.majorId}]]);
     });
 
     //监听form
     function initForm() {
         layui.use('form', function(){
             let form = layui.form;
+            $("#majorSelect").val([[${student.majorId}]]);
+            $("#gradeSelect").val([[${student.gradeId}]]);
             form.render();
             //学院下拉框切换事件
             form.on('select(department)', function(data){

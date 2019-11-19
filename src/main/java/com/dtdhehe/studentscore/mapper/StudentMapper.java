@@ -1,6 +1,7 @@
 package com.dtdhehe.studentscore.mapper;
 
 import com.dtdhehe.studentscore.entity.Student;
+import com.dtdhehe.studentscore.provider.StudentMapperProvider;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -47,12 +48,12 @@ public interface StudentMapper {
     Integer update(Student student);
 
     /**
-     * 查询班级列表
+     * 查询学生列表
      * @param queryMap
      * @return
      */
-//    @SelectProvider(type = GradeMapperProvider.class,method = "queryGrade")
-//    List<Map<String,Object>> queryGrade(Map<String,Object> queryMap);
+    @SelectProvider(type = StudentMapperProvider.class,method = "queryStudent")
+    List<Map<String,Object>> queryStudent(Map<String,Object> queryMap);
 
     /**
      * 删除学生(逻辑删除,将valid_flag置为0)

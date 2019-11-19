@@ -4,12 +4,12 @@ import lombok.Data;
 
 /**
  * @author 陈姗姗
- * @version 1.0
- * @date 2019/11/5 23:13
+ * @version 1.0.0
+ * @date 2019/11/19 16:16
  * @description
  **/
 @Data
-public class Role {
+public class UserRole {
     private String id;
 
     private String validFlag;
@@ -18,5 +18,7 @@ public class Role {
 
     private String updateTime;
 
-    private String roleName;
+    private String userId;
+
+    private String roleId;
 }

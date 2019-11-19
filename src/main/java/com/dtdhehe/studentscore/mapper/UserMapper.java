@@ -32,4 +32,20 @@ public interface UserMapper {
      */
     @Insert("insert into user(id,valid_flag,create_time,update_time,user_name,password,email,phone,sex,status) VALUES(#{id},#{validFlag},#{createTime},#{updateTime},#{userName},#{password},#{email},#{phone},#{sex},#{status})")
     Integer save(User user);
+
+    /**
+     * 根据id查找用户
+     * @param id
+     * @return
+     */
+    @Select("select t.* from user t where t.id=#{id}")
+    User findById(@Param("id") String id);
+
+    /**
+     * 更新用户
+     * @param user
+     * @return
+     */
+    @Update("update user set valid_flag=#{validFlag},update_time=#{updateTime},user_name=#{userName},password=#{password},email=#{email},phone=#{phone},sex=#{sex},status=#{status} where id=#{id}")
+    Integer update(User user);
 }
