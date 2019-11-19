@@ -21,4 +21,6 @@ public class Subject {
     private String subjectNo;
 
     private String subjectName;
+
+    private Integer credit;
 }
