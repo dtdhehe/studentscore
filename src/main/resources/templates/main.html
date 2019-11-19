@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
   <meta charset="UTF-8">
   <title>学生成绩管理系统</title>
@@ -27,7 +28,7 @@
       <ul class="nav navbar-nav pull-right">
         <li class="dropdown li-border"><a href="#" class="dropdown-toggle mystyle-color" data-toggle="dropdown">605875855@qq.com<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="login.html">退出</a></li>
+            <li><a href="javascript:void (0)" onclick="logout()">退出</a></li>
           </ul>
         </li>
       </ul>
@@ -50,7 +51,7 @@
                   <a href="javascript:void (0)" onclick="getSubject()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">学科管理</span></a></li>
               </ul>
             </div>
-            <div class="sBox">
+            <div class="sBox" shiro:hasRole="admin">
               <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">人员管理</span>
               </div>
               <ul class="navContent" style="display:none">
@@ -138,6 +139,12 @@
           
       }
 
+      
+      //退出
+      function logout() {
+        window.location.href = '/logout';
+      }
+      
       //切换导航栏样式
       function changeBar (e){
           $(".sBox ul li").removeClass('active');

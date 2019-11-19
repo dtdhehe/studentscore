@@ -1,5 +1,6 @@
 package com.dtdhehe.studentscore.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.dtdhehe.studentscore.shiro.UserRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -42,7 +43,7 @@ public class ShiroConfig {
         map.put("/js/**","anon");
         map.put("/user/**","anon");
         map.put("/login","anon");
-        map.put("logout","logout");
+        map.put("/logout","logout");
         map.put("/**","authc");
         //被拦截的登录页面
         factoryBean.setLoginUrl("/");
@@ -87,5 +88,10 @@ public class ShiroConfig {
         //设置加密次数
         hashedCredentialsMatcher.setHashIterations(1024);
         return hashedCredentialsMatcher;
+    }
+
+    @Bean(name = "shiroDialect")
+    public ShiroDialect shiroDialect(){
+        return new ShiroDialect();
     }
 }
