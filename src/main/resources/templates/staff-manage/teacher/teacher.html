@@ -14,24 +14,24 @@
 <body>
     <div id="content">
         <div class="well container">
-            <div class="row select layui-form form">               
-                <div class="col-md-2 layui-form-item">
-                    <select name="city" lay-verify="">
-                        <option value="">学院</option>
-                        <option value="010">信息工程学院</option>
-                        <option value="021">机电工程学院</option>
-                        <option value="0571">音乐学院</option>
-                    </select>  
-                </div>
-                <div class="col-md-2">
-                    <input type="text" name="title" placeholder="请输入教师名字" autocomplete="off" class="layui-input">   
-                </div>
-                <div class="col-md-2">
-                    <input type="text" name="phone" placeholder="请输入手机号" autocomplete="off" class="layui-input">   
-                </div>
-                <div  class="col-md-4">
-                        <button type="button" class="layui-btn">搜索</button>
-                </div>    
+            <div class="layui-form form">
+                <form id="queryForm" class="row">
+                    <div class="col-md-3">
+                        <select name="departmentId" lay-filter="department">
+                            <option value="">请选择学院</option>
+                            <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" name="teacherNo" placeholder="请输入教师编号" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="teacherName" placeholder="请输入教师名字" autocomplete="off" class="layui-input">
+                    </div>
+                    <div  class="col-md-3">
+                        <button type="button" class="layui-btn" onclick="search()">搜索</button>
+                    </div>
+                </form>
             </div>
             <hr>
             <button type="button" class="btn btn-primary" onclick="addDialog()">增加教师</button>
@@ -42,11 +42,10 @@
                         <tr>
                             <th data-width="50" data-field="xl"
                                 data-formatter="xlFormatter" data-show-tip="false">序号</th>
-                            <th data-align="center" data-field="answerTitle" data-show-tip="false">编号</th>
-                            <th data-align="center" data-field="answerAuthor">姓名</th>
-                            <th data-align="center" data-field="answerDate">学院</th>
-                            <th data-align="center" data-field="answerDate">性别</th>
-                            <th data-align="center" data-field="answerDate">联系方式</th>
+                            <th data-align="center" data-field="department_name">学院</th>
+                            <th data-align="center" data-field="tno">编号</th>
+                            <th data-align="center" data-field="name">姓名</th>
+                            <th data-align="center" data-field="update_time">修改时间</th>
                             <th data-align="center" data-width="100" data-field="operation"
                                 data-formatter="operation_formatter" data-show-tip="false">操作</th>
                         </tr>
@@ -69,29 +68,96 @@
     $(function(){
         Events.TableInit({
             bootstrapTableId:'#TableList',
-            url:'',
-            option:{
-
-            }
+            url:'/staff/queryTeacher'
         });
-
     });
 
+    //序号显示格式
+    function xlFormatter(value, row, index) {
+        index = index + 1;
+        return index;
+    }
+
+    //添加教师
     function addDialog (){
-        var href='./dialog.html';
+        let href='/staff/getTeacherInfo';
         layer.open({//iframe层
             type : 2,//用1类型容易出错，建议用2
-            id : 'addStudent', //设定一个id，防止重复弹出
-            area : [ '500px', '450px' ],
+            id : 'addTeacher', //设定一个id，防止重复弹出
+            area : [ '500px', '420px' ],
             fix : false, //不固定
             title : '新增教师',
             maxmin : false,
             content : href,
             btn : [ '提交', '关闭' ],
             yes : function(index, layero) {
-                // $(layero).find("iframe")[0].contentWindow.saveSubmit();
+                $(layero).find("iframe")[0].contentWindow.saveSubmit();
             }
         });
+    }
+
+    //搜索
+    function search() {
+        let params = $("#queryForm").serializeObject();
+        //刷新table的数据
+        $("#TableList").bootstrapTable("refresh",{
+            query:params
+        });
+    }
+
+    //列表操作列处理
+    function operation_formatter(value, row, index) {
+        let operation =  "<div class='ibox-tools' style='padding:0; float:none'>";
+        operation = operation + "<a href='javascript:void(0);' onclick='onEditRow(\"" + row.id + "\")' style='padding-top:0;padding-bottom:0;margin-right:3px;padding-left:2px;'><i class='fa fa-pencil'></i></a>";
+        operation = operation + "<a href='javascript:void(0);' onclick='onDeleteRow(\"" + row.id + "\")' style='padding-top:0;padding-bottom:0;margin-right:3px;padding-left:2px;'><i class='fa fa-trash-o'></i></a>";
+        operation = operation  + "</div>";
+        return operation;
+    }
+
+    //编辑
+    function onEditRow(id) {
+        let href='/staff/getTeacherInfo?id='+id;
+        layer.open({//iframe层
+            type : 2,//用1类型容易出错，建议用2
+            id : 'addStudent', //设定一个id，防止重复弹出
+            area : [ '400px', '420px' ],
+            fix : false, //不固定
+            title : '编辑教师信息',
+            maxmin : false,
+            content : href,
+            btn : [ '提交', '关闭' ],
+            yes : function(index, layero) {
+                $(layero).find("iframe")[0].contentWindow.saveSubmit();
+            }
+        });
+    }
+
+    //删除
+    function onDeleteRow(id) {
+        layer.confirm("确定要删除选中记录吗？", {
+            btn: ['是', '否']
+        }, function (index) {
+            let url = '/staff/teacher/'+id;
+            $.ajax({
+                url:url,
+                type:'DELETE',
+                success:function (data) {
+                    if (data.code === 200){
+                        layer.close(index);
+                        $("#TableList").bootstrapTable("refresh");
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                    }
+                }
+            });
+        });
+    }
+
+    //刷新
+    function refresh(msg) {
+        layer.closeAll();
+        $("#TableList").bootstrapTable("refresh");
+        layer.msg(msg, {time:1500, icon:1});
     }
 //]]>
 </script>
