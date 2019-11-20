@@ -3,9 +3,10 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>教师管理</title>
     <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/js/bootstrap-table/css/bootstrap-table.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/font-awesome.min.css}" />
     <link rel="stylesheet" th:href="@{/js/layer/theme/default/layer.css}">
 
     <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
@@ -23,10 +24,10 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <input type="number" name="teacherNo" placeholder="请输入教师编号" autocomplete="off" class="layui-input">
+                        <input type="number" name="tno" placeholder="请输入教师编号" autocomplete="off" class="layui-input">
                     </div>
                     <div class="col-md-3">
-                        <input type="text" name="teacherName" placeholder="请输入教师名字" autocomplete="off" class="layui-input">
+                        <input type="text" name="name" placeholder="请输入教师名字" autocomplete="off" class="layui-input">
                     </div>
                     <div  class="col-md-3">
                         <button type="button" class="layui-btn" onclick="search()">搜索</button>
@@ -84,7 +85,7 @@
         layer.open({//iframe层
             type : 2,//用1类型容易出错，建议用2
             id : 'addTeacher', //设定一个id，防止重复弹出
-            area : [ '500px', '420px' ],
+            area : [ '500px', '320px' ],
             fix : false, //不固定
             title : '新增教师',
             maxmin : false,
@@ -120,7 +121,7 @@
         layer.open({//iframe层
             type : 2,//用1类型容易出错，建议用2
             id : 'addStudent', //设定一个id，防止重复弹出
-            area : [ '400px', '420px' ],
+            area : [ '400px', '320px' ],
             fix : false, //不固定
             title : '编辑教师信息',
             maxmin : false,

@@ -35,9 +35,9 @@ public class TeacherMapperProvider {
                 where.append(" and t.name like concat('%',#{name},'%')");
             }
         }
-        String sql = "select t.*,d.department_name from student t "
+        String sql = "select t.*,d.department_name from teacher t "
                 +" left join department d on t.department_id=d.id where "
-                + where + "order by t.tno asc";
+                + where + " order by t.tno asc";
         if (log.isDebugEnabled()){
             log.debug("SQL语句为:" + sql);
         }

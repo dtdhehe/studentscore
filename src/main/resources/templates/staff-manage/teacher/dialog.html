@@ -11,7 +11,7 @@
             /* margin-top: 20px; */
             padding:20px 30px;
         }
-        .from{
+        .form{
             width: 80%;
         }
     </style>
@@ -20,7 +20,8 @@
 <body>
     <div class="body">
         <form id="dataForm" class="layui-form form">
-            <div class="layui-form-item">
+            <input type="hidden" id="id" name="id" th:value="${teacher.id}" />
+            <div class="layui-form-item row">
                 <label class="layui-form-label">学院</label>
                 <div class="layui-input-block">
                     <select id="departmentSelect" name="departmentId" lay-filter="department"
