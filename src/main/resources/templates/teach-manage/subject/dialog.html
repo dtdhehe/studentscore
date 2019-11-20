@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <link rel="stylesheet" href="../../../js/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../../js/layui/css/layui.css">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
     <style>
         .body{
             /* margin-top: 20px; */
@@ -19,44 +20,79 @@
 <body>
     <div class="body">
         <form class="layui-form form" id="dataForm">
+            <input type="hidden" id="id" name="id" th:value="${subject.id}" />
             <div class="layui-form-item row">
                 <label class="layui-form-label">编号</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required 
-                    placeholder="请输入课程编号" autocomplete="off" class="layui-input">
+                    <input type="number" name="subjectNo" required th:value="${subject.subjectNo}"
+                    placeholder="请输入学科编号" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item row">
                 <label class="layui-form-label">课程</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required   
-                    placeholder="请输入课程名称" autocomplete="off" class="layui-input">
+                    <input type="text" name="subjectName" required th:value="${subject.subjectName}"
+                    placeholder="请输入学科名称" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item row">
                 <label class="layui-form-label">学分</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required
+                    <input type="text" name="credit" required th:value="${subject.credit}"
                     placeholder="请输入对应学分" autocomplete="off" class="layui-input">
                 </div>
             </div>
         </form>
     </div>
-    <script src="../../../js/jquery-2.1.1.min.js"></script>
-    <script src="../../../js/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../../js/jquery.validate/jquery.validate.ext.js"></script>
-    <script src="../../../js/jquery.validate/jquery.validate.js"></script>
-    <script src="../../../js/jquery.validate/messages_zh.js"></script>
-    <script src="../../../js/layui/layui.all.js"></script>
-    <script src=""></script>
-    <script>
+<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/jquery.validate/jquery.validate.js}"></script>
+<script th:src="@{/js/jquery.validate/jquery.validate.ext.js}"></script>
+<script th:src="@{/js/jquery.validate/messages_zh.js}"></script>
+<script th:src="@{/js/layui/layui.all.js}"></script>
+<script th:inline="javascript">
+    //<![CDATA[
+
+    let $form = $("#dataForm");
+
     $(function(){
 
-    })
-    function saveSubmit(){
-        // layer.alert("保存成功");
-    }
+    });
 
-    </script>
+    //保存
+    function saveSubmit(){
+        let validor = $form.validate();
+        if (validor.form()){
+            let id = $("#id").val();
+            if (id !== ''){
+                //id不为空，编辑
+                let url = '/teach/subject/'+id;
+                $.ajax({
+                    url:url,
+                    type:'PUT',
+                    data:$form.serializeArray(),
+                    success:function (data) {
+                        if (data.code === 200){
+                            window.parent.refresh(data.msg);
+                        }else {
+                            layer.msg(data.msg,{time:1500,icon:2});
+                        }
+                    }
+                });
+            }else {
+                //id为空，新增
+                let url = '/teach/subject';
+                $.post(url,$("#dataForm").serializeArray(),function (data) {
+                    if (data.code === 200){
+                        window.parent.refresh(data.msg);
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                    }
+                },"json");
+            }
+        }
+    }
+    //]]>
+</script>
 </body>
 </html>
