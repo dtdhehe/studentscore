@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户中心</title>
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/main/dermadefault.css}">
+    <link rel="stylesheet" th:href="@{/css/main/templatecss.css}">
+    <link rel="stylesheet" th:href="@{/css/user/userinfo.css}">
+</head>
+<body>
+    <div class="manage account-manage info-center">
+        <div class="page-header">
+            <div class="pull-left">
+                <h4>用户中心</h4>      
+            </div>
+        </div>
+        <dl class="account-basic clearfix">
+            <dt class="pull-left">
+            <p class="account-head">
+                <img th:src="@{/image/noavatar_middle.gif}">
+            </p>
+            </dt>
+            <dd class="pull-left margin-large-left margin-small-top content-width">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="text-small">
+                            <span class="show pull-left base-name">用户名</span>:
+                            <span class="margin-left">牛大朗 </span>
+                        </p>
+                        <p class="text-small">
+                            <span class="show pull-left base-name">编号/学号</span>:
+                            <span class="margin-left">2019244384397</span>
+                        </p>
+                        <p class="text-small">
+                            <span class="show pull-left base-name">注册时间</span>:<span class="margin-left">2015-01-12 11:50:22</span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">       
+                        <p class="text-small">
+                            <span class="show pull-left base-name">学院</span>:
+                            <span class="margin-left">信息工程学院 </span>
+                        </p>
+                        <p class="text-small">
+                            <span class="show pull-left base-name">专业</span>:
+                            <span class="margin-left">计算机科学与技术</span>
+                        </p>
+                        <p class="text-small">
+                            <span class="show pull-left base-name">班级</span>:
+                            <span class="margin-left">161</span>
+                        </p>
+                    </div>
+                </div>
+            </dd>
+        </dl>  
+        <ul class="accound-bund">
+            <li class="clearfix">
+                <span class="bund-class">登录密码</span>
+                <span class="w45">安全性高的密码可以使账号更安全，建议您定期更换密码，设置一个包含字母，符号或数字中至少两项且长度超过6位的密码。</span>
+                <span class="pull-right margin-large-right">
+                <i class="glyphicon glyphicon-ok-circle pull-left"></i>
+                <em class="margin-right text-green-deep">已设置</em>
+                                    |
+                <a href="#" onclick="updataPassword()" class="button-word1 margin-left btn_ajax_open">修改</a>
+                </span>
+            </li>
+        </ul>
+    </div>
+<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-table/js/bootstrap-table.js}"></script>
+<script th:src="@{/js/bootstrap-table/js/bootstrap-table-zh-CN.js}"></script>
+<script th:src="@{/js/layui/layui.all.js}"></script>
+<script th:src="@{/js/layer/layer.js}"></script>
+<script th:inline="javascript">
+    //<![CDATA[
+   function updataPassword (){
+        var href='./dialog.html';
+        layer.open({//iframe层
+            type : 2,//用1类型容易出错，建议用2
+            id : 'addStudent', //设定一个id，防止重复弹出
+            area : [ '500px', '300px' ],
+            fix : false, //不固定
+            title : '修改密码',
+            maxmin : false,
+            content : href,
+            btn : [ '提交', '关闭' ],
+            yes : function(index, layero) {
+                $(layero).find("iframe")[0].contentWindow.saveSubmit();
+            }
+        });
+    }
+    //]]>
+</script>
+</body>
+</html>

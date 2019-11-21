@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>轮播图</title>
+    <link rel="stylesheet" href="../../js/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../js/bootstrap-table/css/bootstrap-table.css">
+    <link rel="stylesheet" href="../../js/layer/theme/default/layer.css">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css">
+    <style>
+        #content{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+
+        }
+        .container{
+            width: 100vw;
+        }
+        .form-tab{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <div class="well container">
+            <button type="button" class="btn btn-primary" onclick="addDialog()">增加轮播图</button>
+            <div class="form-tab">
+                <table id="TableList" class="table"
+                    width="100%" style="table-layout:fixed;">
+                    <thead>
+                        <tr>
+                            <th data-width="50" data-field="xl"
+                                data-formatter="xlFormatter" data-show-tip="false">序号</th>
+                            <th data-align="center" data-field="answerTitle">轮播图</th>
+                            <th data-align="center" data-field="answerAuthor">名称</th>
+                            <th data-align="center" data-field="answerDate">介绍</th>
+                            <th data-align="center" data-field="answerDate">状态</th>
+                            <th data-align="center" data-width="100" data-field="operation"
+                                data-formatter="operation_formatter" data-show-tip="false">操作</th>
+                        </tr>
+                    </thead>
+                </table>     
+            </div>
+        </div>
+    </div>
+    <script src="../../js/jquery-2.1.1.min.js"></script>
+    <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../js/bootstrap-table/js/bootstrap-table.js"></script>
+    <script src="../../js/bootstrap-table/js/bootstrap-table-zh-CN.js"></script>
+    <script src="../../js/layui/layui.all.js"></script>
+    <script src="../../js/layer/layer.js"></script>
+    <script src="../../js/public/table-init.js"></script>
+    <script>
+    $(function(){
+            Events.TableInit({
+                bootstrapTableId:'#TableList',
+                url:'',
+                option:{
+
+                }
+            });
+        
+        });
+
+        function addDialog (){
+            var href='./dialog.html';
+            layer.open({//iframe层
+                type : 2,//用1类型容易出错，建议用2
+                id : 'addStudent', //设定一个id，防止重复弹出
+                area : [ '500px', '400px' ],
+                fix : false, //不固定
+                title : '新增轮播图',
+                maxmin : false,
+                content : href,
+                btn : [ '提交', '关闭' ],
+                yes : function(index, layero) {
+                    $(layero).find("iframe")[0].contentWindow.saveSubmit();
+                }
+            });
+        }
+    </script>
+</body>
+</html>

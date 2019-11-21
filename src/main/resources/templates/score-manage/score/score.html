@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>成绩管理</title>
+    <link rel="stylesheet" href="../../../js/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../js/bootstrap-table/css/bootstrap-table.css">
+    <link rel="stylesheet" href="../../../js/layer/theme/default/layer.css">
+
+    <link rel="stylesheet" href="../../../js/layui/css/layui.css">
+    <style>
+        #content{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+        .container{
+            width: 100vw;
+        }
+        .form-tab{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <div class="well container">
+            <div class="row select layui-form form">  
+                <div class="col-md-2 layui-form-item">
+                    <select name="city" lay-verify="">
+                        <option value="">学院</option>
+                        <option value="010">信息工程学院</option>
+                        <option value="021">机电工程学院</option>
+                        <option value="0571">音乐学院</option>
+                    </select>  
+                </div>
+                <div class="col-md-2">
+                    <select name="city" lay-verify="">
+                        <option value="">专业</option>
+                        <option value="010">电子信息工程</option>
+                        <option value="021">计算机科学与技术</option>
+                        <option value="0571">通信工程</option>
+                        <option value="0571">互联网工程</option>
+                    </select> 
+                </div>  
+                <div class="col-md-2">
+                    <select name="city" lay-verify="">
+                        <option value="">班级</option>
+                        <option value="010">电信161</option>
+                        <option value="021">电信162</option>
+                        <option value="0571">电信163</option>
+                    </select> 
+                </div> 
+                <div class="col-md-2">
+                    <select name="city" lay-verify="">
+                        <option value="">课程</option>
+                        <option value="010">模电</option>
+                        <option value="021">数电</option>
+                        <option value="0571">c++</option>
+                    </select> 
+                </div>              
+            </div>
+            <div class="row layui-form form">
+                <div class="col-md-2"> 
+                    <input type="text" name="title" placeholder="请输入学生名字" autocomplete="off" class="layui-input">   
+                </div>
+                <div class="col-md-2"> 
+                    <input type="text" name="title" placeholder="请输入学号" autocomplete="off" class="layui-input">   
+                </div>
+                <div class="col-md-2"> 
+                    <input type="text" name="title" placeholder="请输入任课教师名字" autocomplete="off" class="layui-input">   
+                </div>
+                <div  class="col-md-2">
+                        <button type="button" class="layui-btn">搜索</button>
+                </div> 
+            </div>
+            <hr>
+            <button type="button" class="btn btn-primary" onclick="addDialog()">增加成绩</button>
+            <div class="form-tab">
+                <table id="TableList" class="table" 
+                    width="100%" style="table-layout:fixed;">
+                    <thead>
+                        <tr>
+                            <th data-width="50" data-field="xl"
+                                data-formatter="xlFormatter" data-show-tip="false">序号</th>
+                            <th data-align="center" data-field="answerTitle" data-show-tip="false">课程编号</th>
+                            <th data-align="center" data-field="answerDate">课程名称</th>
+                            <th data-align="center" data-field="answerD ate">学号</th>
+                            <th data-align="center" data-field="answerDate">学生名字</th>
+                            <th data-align="center" data-field="answerDate">学院名称</th>
+                            <th data-align="center" data-field="answerDate">专业名称</th>
+                            <th data-align="center" data-field="answerDate">班级名称</th>
+                            <th data-align="center" data-field="answerDate">平时成绩</th>
+                            <th data-align="center" data-field="answerDate">期中成绩</th>
+                            <th data-align="center" data-field="answerDate">期末成绩</th>
+                            <th data-align="center" data-field="answerDate">学分</th>
+                            <th data-align="center" data-field="answerDate">学期</th>
+                            <th data-align="center" data-field="answerDate">授课教师</th>
+                            <th data-align="center" data-width="100" data-field="operation"
+                                data-formatter="operation_formatter" data-show-tip="false">操作</th>
+                        </tr>
+                    </thead>
+                </table>     
+            </div>
+        </div>
+    </div>
+   
+    <script src="../../../js/jquery-2.1.1.min.js"></script>
+    <script src="../../../js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../../js/bootstrap-table/js/bootstrap-table.js"></script>
+    <script src="../../../js/bootstrap-table/js/bootstrap-table-zh-CN.js"></script>
+    <script src="../../../js/layui/layui.all.js"></script>
+    <script src="../../../js/layer/layer.js"></script>
+    <script src="../../../js/public/table-init.js"></script>
+   
+    <script>
+        $(function(){
+            Events.TableInit({
+                bootstrapTableId:'#TableList',
+                url:'',
+                option:{
+
+                }
+            });
+        
+        });
+
+        function addDialog (){
+            var href='./dialog.html';
+            layer.open({//iframe层
+                type : 2,//用1类型容易出错，建议用2
+                id : 'addStudent', //设定一个id，防止重复弹出
+                area : [ '500px', '555px' ],
+                fix : false, //不固定
+                title : '新增成绩',
+                maxmin : false,
+                content : href,
+                btn : [ '提交', '关闭' ],
+                yes : function(index, layero) {
+                    $(layero).find("iframe")[0].contentWindow.saveSubmit();
+                }
+            });
+        }
+        function refresh(msg) {
+            layer.closeAll();
+            layer.msg(msg, {time:1500, icon:1});
+        }
+    </script>
+</body>
+</html>

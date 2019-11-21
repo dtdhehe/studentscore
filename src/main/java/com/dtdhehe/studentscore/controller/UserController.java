@@ -1,14 +1,11 @@
 package com.dtdhehe.studentscore.controller;
 
-import com.dtdhehe.studentscore.entity.User;
-import com.dtdhehe.studentscore.service.UserService;
-import com.dtdhehe.studentscore.util.ConstantUtils;
-import com.dtdhehe.studentscore.util.ResultUtils;
-import com.dtdhehe.studentscore.vo.ResultVO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author 陈珊珊
@@ -16,26 +13,26 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019/11/5 23:36
  * @description
  **/
-@RestController
+@Controller
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-
     /**
-     * 注册用户
-     * @param user
+     * 个人信息管理
      * @return
      */
-    @PostMapping("/")
-    public ResultVO registeUser(User user){
-        User dbUser = userService.findByUserName(user.getUserName());
-        if (dbUser != null){
-            return ResultUtils.failed("该用户名已被使用");
-        }
-        Integer result = userService.saveOrUpdateUser(user);
-        return result.equals(ConstantUtils.SUCCESS)?ResultUtils.success("注册成功"):ResultUtils.failed("注册失败,请重新注册");
+    @GetMapping("/getUserManage")
+    public String getUserManage(Model model){
+        return "user-manage/userinfo/userinfo";
+    }
+
+    /**
+     * 个人信息新增编辑页面
+     * @return
+     */
+    @GetMapping("/getUserInfo")
+    public String getUserInfo(@RequestParam(value = "id",required = false)String id, Model model){
+        return "user-manage/userinfo/dialog";
     }
 
 }

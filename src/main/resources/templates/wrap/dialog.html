@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<label lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../js/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../js/layui/css/layui.css">
+    <style>
+        .body{
+            /* margin-top: 20px; */
+            padding:10px 30px;
+            width:480px
+        }
+        .form{
+            width: 100%;
+        }
+        .layui-form-label{
+            width: 100px;
+        }
+        .upload{
+            padding-left: 100px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="body">
+        <form class="layui-form form" id="dataForm">
+            <div class="layui-form-item row">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="username" required 
+                    placeholder="请输入图片标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text row">
+                <label class="layui-form-label">介绍</label>
+                <div class="layui-input-block">
+                    <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>   
+            <div class="layui-form-item row ">
+                <label class="layui-form-label">图片</label>
+                <button type="button" class="layui-btn" id="test1">
+                    <i class="layui-icon">&#xe67c;</i>上传图片
+                </button>
+            </div>
+        </form>
+    </div>
+    <script src="../../js/jquery-2.1.1.min.js"></script>
+    <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../js/jquery.validate/jquery.validate.ext.js"></script>
+    <script src="../../js/jquery.validate/jquery.validate.js"></script>
+    <script src="../../js/jquery.validate/messages_zh.js"></script>
+    <script src="../../js/layui/layui.all.js"></script>
+    <script>
+    $(function(){
+
+    })
+    function saveSubmit(){
+        // layer.alert("保存成功");
+    }
+    layui.use('upload', function(){
+    var upload = layui.upload;
+    
+    //执行实例
+    var uploadInst = upload.render({
+        elem: '#test1' //绑定元素
+        ,url: '/upload/' //上传接口
+        ,done: function(res){
+        //上传完毕回调
+        }
+        ,error: function(){
+        //请求异常回调
+        }
+    });
+    });
+    </script>
+</body>
+</html>

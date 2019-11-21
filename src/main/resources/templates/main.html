@@ -26,8 +26,9 @@
       </ul>
 
       <ul class="nav navbar-nav pull-right">
-        <li class="dropdown li-border"><a href="#" class="dropdown-toggle mystyle-color" data-toggle="dropdown">605875855@qq.com<span class="caret"></span></a>
+        <li class="dropdown li-border personal"><a href="#" class="dropdown-toggle mystyle-color" data-toggle="dropdown"><span shiro:principal property="userName"></span><span class="caret"></span></a>
           <ul class="dropdown-menu">
+            <li><a href="javascript:void (0)" onclick="getPersonal()">个人信息中心</a></li>
             <li><a href="javascript:void (0)" onclick="logout()">退出</a></li>
           </ul>
         </li>
@@ -68,13 +69,13 @@
                   <a href="javascript:void (0)" onclick="getScore()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">成绩统计表</span></a></li>
               </ul>
             </div>
-            <div class="sBox">
-              <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">个人管理</span></div>
-              <ul class="navContent" style="display:none">
-                <li onclick="changeBar(this)">
-                  <a href="javascript:void (0)" onclick="getPersonal()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">个人信息维护</span></a></li>
-              </ul>
-            </div>
+            <!--<div class="sBox">-->
+              <!--<div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">个人管理</span></div>-->
+              <!--<ul class="navContent" style="display:none">-->
+                <!--<li onclick="changeBar(this)">-->
+                  <!--<a href="javascript:void (0)" onclick="getPersonal()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">个人信息维护</span></a></li>-->
+              <!--</ul>-->
+            <!--</div>-->
             <div class="sBox">
               <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">轮播图管理</span></div>
               <ul class="navContent" style="display:none">
@@ -132,7 +133,7 @@
       }
       //个人信息页面
       function getPersonal() {
-
+          $("#iframe").attr('src','/user/getUserManage');
       }
       //首页设置
       function getSetting() {
