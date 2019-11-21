@@ -71,4 +71,12 @@ public interface StudentMapper {
      */
     @Select("select t.* from student t where t.grade_id=#{gradeId} and t.valid_flag='1'")
     List<Student> findByGradeId(@Param("gradeId") String gradeId);
+
+    /**
+     * 根据用户id查找学生
+     * @param userId
+     * @return
+     */
+    @Select("select t.* from student t where t.user_id=#{userId} and t.valid_flag='1'")
+    Student findByUserId(@Param("userId") String userId);
 }

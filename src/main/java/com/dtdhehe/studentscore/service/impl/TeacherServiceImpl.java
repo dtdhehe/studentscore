@@ -120,4 +120,14 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setUpdateTime(DateUtils.formatDateTime2());
         return teacherMapper.update(teacher);
     }
+
+    @Override
+    public List<Teacher> findByDepartmentId(String departmentId) {
+        return teacherMapper.findByDepartmentId(departmentId);
+    }
+
+    @Override
+    public Teacher findByUserId(String userId) {
+        return teacherMapper.findByUserId(userId);
+    }
 }

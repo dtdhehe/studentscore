@@ -53,4 +53,11 @@ public interface StudentService {
      * @return
      */
     List<Student> findByGradeId(String id);
+
+    /**
+     * 根据userid查询学生
+     * @param userId
+     * @return
+     */
+    Student findByUserId(String userId);
 }

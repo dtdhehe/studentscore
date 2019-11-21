@@ -2,6 +2,7 @@ package com.dtdhehe.studentscore.service;
 
 import com.dtdhehe.studentscore.entity.Teacher;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,4 +46,19 @@ public interface TeacherService {
      * @return
      */
     Integer delete(String id);
+
+    /**
+     * 根据学院id查询所有教师
+     * @param departmentId
+     * @return
+     */
+    List<Teacher> findByDepartmentId(String departmentId);
+
+    /**
+     * 根据用户id查找教师
+     * @param userId
+     * @return
+     */
+    Teacher findByUserId(String userId);
+
 }

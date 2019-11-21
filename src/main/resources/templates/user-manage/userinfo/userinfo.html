@@ -27,26 +27,27 @@
                     <div class="col-md-6">
                         <p class="text-small">
                             <span class="show pull-left base-name">用户名</span>:
-                            <span class="margin-left">牛大朗 </span>
+                            <span class="margin-left" th:text="${user.userName}"></span>
                         </p>
-                        <p class="text-small">
+                        <p class="text-small" th:if="${user.status != '0'}">
                             <span class="show pull-left base-name">编号/学号</span>:
-                            <span class="margin-left">2019244384397</span>
+                            <span class="margin-left" th:if="${user.status == '1'}" th:text="${teacher.tno}"></span>
+                            <span class="margin-left" th:if="${user.status == '2'}" th:text="${student.sno}"></span>
                         </p>
                         <p class="text-small">
-                            <span class="show pull-left base-name">注册时间</span>:<span class="margin-left">2015-01-12 11:50:22</span>
+                            <span class="show pull-left base-name">注册时间</span>:<span class="margin-left" th:text="${user.createTime}"></span>
                         </p>
                     </div>
-                    <div class="col-md-6">       
+                    <div class="col-md-6" th:if="${user.status != '0'}">
                         <p class="text-small">
                             <span class="show pull-left base-name">学院</span>:
-                            <span class="margin-left">信息工程学院 </span>
+                            <span class="margin-left">信息工程学院</span>
                         </p>
-                        <p class="text-small">
+                        <p class="text-small" th:if="${user.status == '2'}">
                             <span class="show pull-left base-name">专业</span>:
                             <span class="margin-left">计算机科学与技术</span>
                         </p>
-                        <p class="text-small">
+                        <p class="text-small" th:if="${user.status == '2'}">
                             <span class="show pull-left base-name">班级</span>:
                             <span class="margin-left">161</span>
                         </p>

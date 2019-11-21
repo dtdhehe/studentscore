@@ -56,4 +56,19 @@ public interface TeacherMapper {
     @SelectProvider(type = TeacherMapperProvider.class,method = "queryTeacher")
     List<Map<String,Object>> queryTeacher(Map<String,Object> queryMap);
 
+    /**
+     * 根据学院id查询所有教师
+     * @param departmentId
+     * @return
+     */
+    @Select("select t.* from teacher t where t.department_id=#{departmentId} and t.valid_flag='1'")
+    List<Teacher> findByDepartmentId(@Param("departmentId") String departmentId);
+
+    /**
+     * 根据用户id查找教师
+     * @param userId
+     * @return
+     */
+    @Select("select t.* from teacher t where t.user_id=#{userId} and t.valid_flag='1'")
+    Teacher findByUserId(@Param("userId") String userId);
 }

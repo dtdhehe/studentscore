@@ -123,4 +123,9 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> findByGradeId(String id) {
         return studentMapper.findByGradeId(id);
     }
+
+    @Override
+    public Student findByUserId(String userId) {
+        return studentMapper.findByUserId(userId);
+    }
 }
