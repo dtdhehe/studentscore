@@ -35,7 +35,7 @@
                             <span class="margin-left" th:if="${user.status == '2'}" th:text="${student.sno}"></span>
                         </p>
                         <p class="text-small">
-                            <span class="show pull-left base-name">注册时间</span>:<span class="margin-left" th:text="${user.createTime}"></span>
+                            <span class="show pull-left base-name">注册时间</span>:<span id="registTime" class="margin-left"></span>
                         </p>
                     </div>
                     <div class="col-md-6" th:if="${user.status != '0'}">
@@ -76,6 +76,15 @@
 <script th:src="@{/js/layer/layer.js}"></script>
 <script th:inline="javascript">
     //<![CDATA[
+
+    $(function(){
+        let dateTime = [[${user.createTime}]];
+        //转换格式
+        dateTime = dateTime.substring(0,4) + '-' + dateTime.substring(4,6) + '-' + dateTime.substring(6,8) +
+                    ' ' + dateTime.substring(8,10) + ':' + dateTime.substring(10,12) + ':' + dateTime.substring(12,14);
+        $("#registTime").text(dateTime);
+    });
+
    function updataPassword (){
         var href='./dialog.html';
         layer.open({//iframe层

@@ -52,8 +52,6 @@ public class UserController {
             Student student = studentService.findByUserId(user.getId());
             model.addAttribute("student",student);
         }
-        //转换创建时间
-        user.setCreateTime(DateUtils.convertDateToViewType(user.getCreateTime(),"datetime"));
         model.addAttribute("user",user);
         model.addAttribute("department",departmentService.findAll());
         return "user-manage/userinfo/userinfo";
