@@ -66,6 +66,8 @@
               <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">成绩管理</span></div>
               <ul class="navContent" style="display:none">
                 <li onclick="changeBar(this)">
+                  <a href="javascript:void (0)" onclick="getCourse()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">课程管理</span></a></li>
+                <li onclick="changeBar(this)">
                   <a href="javascript:void (0)" onclick="getScore()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">成绩统计表</span></a></li>
               </ul>
             </div>
@@ -126,6 +128,10 @@
       //教室管理页面
       function getTeacher() {
         $("#iframe").attr('src','/staff/getTeacherManage');
+      }
+      //课程管理页面
+      function getCourse() {
+          $("#iframe").attr('src','/score/getCourseManage');
       }
       //成绩管理页面
       function getScore() {

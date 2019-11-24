@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/font-awesome.min.css}" />
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <style>
+        .body{
+            /* margin-top: 20px; */
+            padding:10px 30px;
+        }
+        .from{
+            width: 80%;
+        }
+        .search-icon{
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 35%;
+            left: 90%;
+        }
+    </style>
+
+</head>
+<body>
+<div class="body">
+    <form id="dataForm" class="layui-form from">
+        <input type="hidden" id="id" name="id" th:value="${course.id}" />
+        <div class="layui-form-item row">
+            <label class="layui-form-label">课程</label>
+            <div class="layui-input-block">
+                <input type="text" id="subjectName" name="subjectName" required onclick="openSubjectSelect()"
+                       readonly autocomplete="off" class="layui-input" th:value="${course.subjectName}">
+                <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                <input type="hidden" id="subjectId" name="subjectId" required th:value="${course.subjectId}"
+                       readonly autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item row">
+            <label class="layui-form-label">学院</label>
+            <div class="layui-input-block">
+                <select id="departmentSelect" name="departmentId" lay-filter="department"
+                        th:field="${course.departmentId}">
+                    <option value="">请选择学院</option>
+                    <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item row">
+            <label class="layui-form-label">专业</label>
+            <div class="layui-input-block">
+                <select id="majorSelect" name="majorId" lay-filter="major">
+                    <option value="">请选择专业</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item row">
+            <label class="layui-form-label">班级</label>
+            <div class="layui-input-block">
+                <select id="gradeSelect" name="gradeId">
+                    <option value="">请选择班级</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item row">
+            <label class="layui-form-label">教师</label>
+            <div class="layui-input-block">
+                <input type="text" id="teacherName" name="teacherName" required onclick="openTeacherSelect()"
+                       readonly autocomplete="off" class="layui-input" th:value="${course.teacherName}">
+                <i class="fa fa-search search-icon" aria-hidden="true"></i>
+                <input type="hidden" id="teacherId" name="teacherId" required th:value="${course.teacherId}"
+                       readonly autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item row">
+            <label class="layui-form-label">学年</label>
+            <div class="layui-input-block">
+                <input type="number" name="schoolYear" required th:value="${course.schoolYear}"
+                       placeholder="请输入学年" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item row">
+            <label class="layui-form-label">学期</label>
+            <div class="layui-input-block">
+                <select id="schoolTerm" name="schoolTerm" th:field="${course.schoolTerm}">
+                    <option value="">请选择学期</option>
+                    <option value="1">第一学期</option>
+                    <option value="2">第二学期</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</div>
+<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/jquery.validate/jquery.validate.js}"></script>
+<script th:src="@{/js/jquery.validate/jquery.validate.ext.js}"></script>
+<script th:src="@{/js/jquery.validate/messages_zh.js}"></script>
+<script th:src="@{/js/layui/layui.all.js}"></script>
+<script th:inline="javascript">
+    //<![CDATA[
+
+    let $form = $("#dataForm");
+
+    $(function(){
+        initMajorSelect([[${course.departmentId}]]);
+        initGradeSelect([[${course.majorId}]]);
+    });
+
+    //监听form
+    function initForm() {
+        layui.use('form', function(){
+            let form = layui.form;
+            let majorId = [[${course.majorId}]] || '';
+            let gradeId = [[${course.gradeId}]] || '';
+            //不为空，则渲染下拉框
+            majorId !== '' && $("#majorSelect").val([[${course.majorId}]]);
+            gradeId !== '' && $("#gradeSelect").val([[${course.gradeId}]]);
+            form.render();
+            //学院下拉框切换事件
+            form.on('select(department)', function(data){
+                //如果学院不为空,则渲染专业下拉框
+                data.value !== '' && initMajorSelect(data.value);
+            });
+            //专业下拉框切换事件
+            form.on('select(major)', function(data){
+                //如果专业不为空,则渲染班级下拉框
+                data.value !== '' && initGradeSelect(data.value);
+            });
+        });
+    }
+
+    //渲染专业下拉框
+    function initMajorSelect(departmentId) {
+        let url = '/teach/' + departmentId + '/major';
+        $.get(url,{},function (data) {
+            if (data.code === 200){
+                let majorList = data.data;
+                //先清空之前的选项
+                $("#majorSelect").empty();
+                $("#majorSelect").append('<option value="">请选择专业</option>');
+                for (let item of majorList){
+                    let options = '<option value="'+item.id+'">'+item.majorName+'</option>';
+                    $("#majorSelect").append(options);
+                }
+                initForm();
+            }else {
+                layer.msg(data.msg,{time:1500,icon:2});
+            }
+        },"json");
+    }
+
+    //渲染班级下拉框
+    function initGradeSelect(majorId) {
+        let url = '/teach/' + majorId + '/grade';
+        $.get(url,{},function (data) {
+            if (data.code === 200){
+                let majorList = data.data;
+                //先清空之前的选项
+                $("#gradeSelect").empty();
+                $("#gradeSelect").append('<option value="">请选择班级</option>');
+                for (let item of majorList){
+                    let options = '<option value="'+item.id+'">'+item.gradeName+'</option>';
+                    $("#gradeSelect").append(options);
+                }
+                initForm();
+            }else {
+                layer.msg(data.msg,{time:1500,icon:2});
+            }
+        },"json");
+    }
+
+    //打开课程选择弹窗
+    function openSubjectSelect() {
+        debugger;
+        let href='/score/openSubjectSelect';
+        parent.layer.open({//iframe层
+            type : 2,//用1类型容易出错，建议用2
+            id : 'addSubject', //设定一个id，防止重复弹出
+            area : [ '800px', '450px' ],
+            fix : false, //不固定
+            title : '课程选择窗口',
+            maxmin : false,
+            content : href,
+            btn : [ '选择', '取消' ],
+            yes : function(index, layero) {
+                $(layero).find("iframe")[0].contentWindow.chooseRow();
+            }
+        });
+    }
+
+    //从课程选择弹框子页面获得数据
+    function checkFromSubjectPop(row) {
+        $("#subjectName").val(row.subjectName);
+        $("#subjectId").val(row.id);
+    }
+
+    //打开课程选择弹窗
+    function openTeacherSelect() {
+        let href='/score/openTeacherSelect';
+        parent.layer.open({//iframe层
+            type : 2,//用1类型容易出错，建议用2
+            id : 'addTeacher', //设定一个id，防止重复弹出
+            area : [ '800px', '450px' ],
+            fix : false, //不固定
+            title : '教师选择窗口',
+            maxmin : false,
+            content : href,
+            btn : [ '选择', '取消' ],
+            yes : function(index, layero) {
+                $(layero).find("iframe")[0].contentWindow.chooseRow();
+            }
+        });
+    }
+
+    //从课程选择弹框子页面获得数据
+    function checkFromTeacherPop(row) {
+        $("#teacherName").val(row.name);
+        $("#teacherId").val(row.id);
+    }
+
+    //保存
+    function saveSubmit(){
+        let validor = $form.validate();
+        //校验是否选择了专业和学院
+        let departmentId = $("#departmentSelect").val();
+        let majorId = $("#majorSelect").val();
+        let gradeId = $("#gradeSelect").val();
+        let schoolTerm = $("#schoolTerm").val();
+        if (departmentId === '' || majorId === '' || gradeId === '' || schoolTerm === ''){
+            layer.msg("请选择下拉框",{time:1500,icon:2});
+            return;
+        }
+        if (validor.form()){
+            let id = $("#id").val();
+            if (id !== ''){
+                //id不为空，编辑
+                let url = '/score/course/'+id;
+                $.ajax({
+                    url:url,
+                    type:'PUT',
+                    data:$form.serializeArray(),
+                    success:function (data) {
+                        if (data.code === 200){
+                            window.parent.refresh(data.msg);
+                        }else {
+                            layer.msg(data.msg,{time:1500,icon:2});
+                        }
+                    }
+                });
+            }else {
+                //id为空，新增
+                let url = '/score/course';
+                $.post(url,$("#dataForm").serializeArray(),function (data) {
+                    if (data.code === 200){
+                        window.parent.refresh(data.msg);
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                    }
+                },"json");
+            }
+        }
+    }
+    //]]>
+</script>
+</body>
+</html>

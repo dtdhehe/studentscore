@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>教师管理</title>
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap-table/css/bootstrap-table.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/font-awesome.min.css}" />
+    <link rel="stylesheet" th:href="@{/js/layer/theme/default/layer.css}">
+
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/css/staff-manage/teacher.css}">
+    <style>
+        .input-width{
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <div class="well container">
+            <div class="layui-form form">
+                <form id="queryForm" class="row" style="display: flex;justify-content:space-around">
+                    <select name="departmentId" lay-filter="department">
+                        <option value="">请选择学院</option>
+                        <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
+                    </select>
+                    <input type="number" name="tno" placeholder="请输入教师编号" autocomplete="off" class="layui-input input-width" >
+                    <input type="text" name="name" placeholder="请输入教师名字" autocomplete="off" class="layui-input input-width">
+                    <button type="button" class="layui-btn" onclick="search()">搜索</button>
+                </form>
+            </div>
+            <hr>
+            <div class="form-tab">
+                <table id="TableList" class="table"
+                    width="100%" style="table-layout:fixed;">
+                    <thead>
+                        <tr>
+                            <th data-field="select" data-checkbox="true"></th>
+                            <th data-width="50" data-field="xl"
+                                data-formatter="xlFormatter" data-show-tip="false">序号</th>
+                            <th data-align="center" data-field="department_name">学院</th>
+                            <th data-align="center" data-field="tno">编号</th>
+                            <th data-align="center" data-field="name">姓名</th>
+                        </tr>
+                    </thead>
+                </table>     
+            </div>
+        </div>
+    </div>
+
+<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-table/js/bootstrap-table.js}"></script>
+<script th:src="@{/js/bootstrap-table/js/bootstrap-table-zh-CN.js}"></script>
+<script th:src="@{/js/layui/layui.all.js}"></script>
+<script th:src="@{/js/layer/layer.js}"></script>
+<script th:src="@{/js/public/table-init.js}"></script>
+
+<script th:inline="javascript">
+//<![CDATA[
+    $(function(){
+        Events.TableInit({
+            bootstrapTableId:'#TableList',
+            url:'/staff/queryTeacher',
+            option:{
+                onDblClickRow: function (row, $element) {
+                    chooseRow(row);
+                }
+            }
+        });
+    });
+
+    //序号显示格式
+    function xlFormatter(value, row, index) {
+        index = index + 1;
+        return index;
+    }
+
+
+    //搜索
+    function search() {
+        let params = $("#queryForm").serializeObject();
+        //刷新table的数据
+        $("#TableList").bootstrapTable("refresh",{
+            query:params
+        });
+    }
+
+//选择事件
+function chooseRow(row) {
+    if (row === undefined) {
+        let rowList = $("#TableList").bootstrapTable('getSelections');
+        if (rowList.length === 0) {
+            layer.msg("请选择一条审核要点!",{time:2000,icon:2});
+            return;
+        }
+        row = rowList[0];
+    }
+    let index = parent.layer.getFrameIndex(window.name);
+    //关闭当前iframe
+    parent.layer.close(index);
+    window.parent.$("#layui-layer-iframe" + parent.idx)[0].contentWindow.checkFromTeacherPop(row);
+}
+
+//]]>
+</script>
+</body>
+</html>
