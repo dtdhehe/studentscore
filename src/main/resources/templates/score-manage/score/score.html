@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>成绩管理</title>
-    <link rel="stylesheet" href="../../../js/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../../js/bootstrap-table/css/bootstrap-table.css">
-    <link rel="stylesheet" href="../../../js/layer/theme/default/layer.css">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap-table/css/bootstrap-table.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/font-awesome.min.css}" />
+    <link rel="stylesheet" th:href="@{/js/layer/theme/default/layer.css}">
 
-    <link rel="stylesheet" href="../../../js/layui/css/layui.css">
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
     <style>
         #content{
             width: 100%;
@@ -25,77 +27,61 @@
 <body>
     <div id="content">
         <div class="well container">
-            <div class="row select layui-form form">  
-                <div class="col-md-2 layui-form-item">
-                    <select name="city" lay-verify="">
-                        <option value="">学院</option>
-                        <option value="010">信息工程学院</option>
-                        <option value="021">机电工程学院</option>
-                        <option value="0571">音乐学院</option>
-                    </select>  
-                </div>
-                <div class="col-md-2">
-                    <select name="city" lay-verify="">
-                        <option value="">专业</option>
-                        <option value="010">电子信息工程</option>
-                        <option value="021">计算机科学与技术</option>
-                        <option value="0571">通信工程</option>
-                        <option value="0571">互联网工程</option>
-                    </select> 
-                </div>  
-                <div class="col-md-2">
-                    <select name="city" lay-verify="">
-                        <option value="">班级</option>
-                        <option value="010">电信161</option>
-                        <option value="021">电信162</option>
-                        <option value="0571">电信163</option>
-                    </select> 
-                </div> 
-                <div class="col-md-2">
-                    <select name="city" lay-verify="">
-                        <option value="">课程</option>
-                        <option value="010">模电</option>
-                        <option value="021">数电</option>
-                        <option value="0571">c++</option>
-                    </select> 
-                </div>              
-            </div>
-            <div class="row layui-form form">
-                <div class="col-md-2"> 
-                    <input type="text" name="title" placeholder="请输入学生名字" autocomplete="off" class="layui-input">   
-                </div>
-                <div class="col-md-2"> 
-                    <input type="text" name="title" placeholder="请输入学号" autocomplete="off" class="layui-input">   
-                </div>
-                <div class="col-md-2"> 
-                    <input type="text" name="title" placeholder="请输入任课教师名字" autocomplete="off" class="layui-input">   
-                </div>
-                <div  class="col-md-2">
-                        <button type="button" class="layui-btn">搜索</button>
-                </div> 
+            <div class="layui-form form">
+                <form id="queryForm" class="row">
+                    <div class="col-md-3">
+                        <input type="text" name="subjectName" placeholder="请输入课程名称" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="col-md-3">
+                        <select name="departmentId" lay-filter="department">
+                            <option value="">请选择学院</option>
+                            <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="majorSelect" name="majorId" lay-filter="major">
+                            <option value="">请选择专业</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="gradeSelect" name="gradeId" lay-filter="grade">
+                            <option value="">请选择班级</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="teacherName" placeholder="请输入任课教师名字" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="sno" placeholder="请输入学号" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                    <div  class="col-md-3">
+                        <button type="button" class="layui-btn" onclick="search()">搜索</button>
+                    </div>
+                </form>
             </div>
             <hr>
-            <button type="button" class="btn btn-primary" onclick="addDialog()">增加成绩</button>
             <div class="form-tab">
-                <table id="TableList" class="table" 
-                    width="100%" style="table-layout:fixed;">
+                <table id="TableList" class="table" width="100%" style="table-layout:fixed;">
                     <thead>
                         <tr>
-                            <th data-width="50" data-field="xl"
+                            <th data-width="50" data-align="center" data-field="xl"
                                 data-formatter="xlFormatter" data-show-tip="false">序号</th>
-                            <th data-align="center" data-field="answerTitle" data-show-tip="false">课程编号</th>
-                            <th data-align="center" data-field="answerDate">课程名称</th>
-                            <th data-align="center" data-field="answerD ate">学号</th>
-                            <th data-align="center" data-field="answerDate">学生名字</th>
-                            <th data-align="center" data-field="answerDate">学院名称</th>
-                            <th data-align="center" data-field="answerDate">专业名称</th>
-                            <th data-align="center" data-field="answerDate">班级名称</th>
-                            <th data-align="center" data-field="answerDate">平时成绩</th>
-                            <th data-align="center" data-field="answerDate">期中成绩</th>
-                            <th data-align="center" data-field="answerDate">期末成绩</th>
-                            <th data-align="center" data-field="answerDate">学分</th>
-                            <th data-align="center" data-field="answerDate">学期</th>
-                            <th data-align="center" data-field="answerDate">授课教师</th>
+                            <th data-width="200" data-align="center" data-field="subject_name">课程名称</th>
+                            <th data-width="80" data-align="center" data-field="tname">授课教师</th>
+                            <!--<th data-width="100" data-align="center" data-field="department_name">学院名称</th>-->
+                            <!--<th data-width="100" data-align="center" data-field="major_name">专业名称</th>-->
+                            <th data-width="100" data-align="center" data-field="grade_name">班级名称</th>
+                            <th data-width="150" data-align="center" data-field="sno">学号</th>
+                            <th data-width="100" data-align="center" data-field="sname">学生名字</th>
+                            <th data-width="70" data-align="center" data-field="credit">学分</th>
+                            <th data-width="70" data-align="center" data-field="school_year">学年</th>
+                            <th data-width="100" data-align="center" data-field="school_term">学期</th>
+                            <!--<th data-align="center" data-field="normal_score">平时成绩</th>-->
+                            <!--<th data-align="center" data-field="midterm_score">期中成绩</th>-->
+                            <!--<th data-align="center" data-field="endterm_score">期末成绩</th>-->
+                            <th data-align="center" data-field="total_score" data-formatter="total_score_formatter">总成绩</th>
                             <th data-align="center" data-width="100" data-field="operation"
                                 data-formatter="operation_formatter" data-show-tip="false">操作</th>
                         </tr>
@@ -104,47 +90,162 @@
             </div>
         </div>
     </div>
-   
-    <script src="../../../js/jquery-2.1.1.min.js"></script>
-    <script src="../../../js/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../../js/bootstrap-table/js/bootstrap-table.js"></script>
-    <script src="../../../js/bootstrap-table/js/bootstrap-table-zh-CN.js"></script>
-    <script src="../../../js/layui/layui.all.js"></script>
-    <script src="../../../js/layer/layer.js"></script>
-    <script src="../../../js/public/table-init.js"></script>
-   
-    <script>
-        $(function(){
-            Events.TableInit({
-                bootstrapTableId:'#TableList',
-                url:'',
-                option:{
 
-                }
-            });
-        
+<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-table/js/bootstrap-table.js}"></script>
+<script th:src="@{/js/bootstrap-table/js/bootstrap-table-zh-CN.js}"></script>
+<script th:src="@{/js/layui/layui.all.js}"></script>
+<script th:src="@{/js/layer/layer.js}"></script>
+<script th:src="@{/js/public/table-init.js}"></script>
+
+<script th:inline="javascript">
+    //<![CDATA[
+    $(function(){
+        Events.TableInit({
+            bootstrapTableId:'#TableList',
+            url:'/score/queryScore',
+            option:{
+
+            }
         });
+        initForm();
+    });
 
-        function addDialog (){
-            var href='./dialog.html';
-            layer.open({//iframe层
-                type : 2,//用1类型容易出错，建议用2
-                id : 'addStudent', //设定一个id，防止重复弹出
-                area : [ '500px', '555px' ],
-                fix : false, //不固定
-                title : '新增成绩',
-                maxmin : false,
-                content : href,
-                btn : [ '提交', '关闭' ],
-                yes : function(index, layero) {
-                    $(layero).find("iframe")[0].contentWindow.saveSubmit();
+    //监听form
+    function initForm() {
+        layui.use('form', function(){
+            let form = layui.form;
+            form.render();
+            //学院下拉框切换事件
+            form.on('select(department)', function(data){
+                //如果学院不为空,则渲染专业下拉框
+                data.value !== '' && initMajorSelect(data.value);
+            });
+            //专业下拉框切换事件
+            form.on('select(major)', function(data){
+                //如果专业不为空,则渲染班级下拉框
+                data.value !== '' && initGradeSelect(data.value);
+            });
+        });
+    }
+
+    //渲染专业下拉框
+    function initMajorSelect(departmentId) {
+        let url = '/teach/' + departmentId + '/major';
+        $.get(url,{},function (data) {
+            if (data.code === 200){
+                let majorList = data.data;
+                //先清空之前的选项
+                $("#majorSelect").empty();
+                $("#majorSelect").append('<option value="">请选择专业</option>');
+                for (let item of majorList){
+                    let options = '<option value="'+item.id+'">'+item.majorName+'</option>';
+                    $("#majorSelect").append(options);
+                }
+                initForm();
+            }else {
+                layer.msg(data.msg,{time:1500,icon:2});
+            }
+        },"json");
+    }
+
+    //渲染班级下拉框
+    function initGradeSelect(majorId) {
+        let url = '/teach/' + majorId + '/grade';
+        $.get(url,{},function (data) {
+            if (data.code === 200){
+                let majorList = data.data;
+                //先清空之前的选项
+                $("#gradeSelect").empty();
+                $("#gradeSelect").append('<option value="">请选择班级</option>');
+                for (let item of majorList){
+                    let options = '<option value="'+item.id+'">'+item.gradeName+'</option>';
+                    $("#gradeSelect").append(options);
+                }
+                initForm();
+            }else {
+                layer.msg(data.msg,{time:1500,icon:2});
+            }
+        },"json");
+    }
+
+    //序号显示格式
+    function xlFormatter(value, row, index) {
+        index = index + 1;
+        return index;
+    }
+
+    //搜索
+    function search() {
+        let params = $("#queryForm").serializeObject();
+        //刷新table的数据
+        $("#TableList").bootstrapTable("refresh",{
+            query:params
+        });
+    }
+
+    //总成绩列处理
+    function total_score_formatter(value, row, index) {
+        //未录入
+        let unEdit = '<span class="label label-danger">未录入</span>';
+        return (row.total_score === undefined)?unEdit:value;
+    }
+
+    //列表操作列处理
+    function operation_formatter(value, row, index) {
+        let operation =  "<div class='ibox-tools' style='padding:0; float:none'>";
+        operation = operation + "<a href='javascript:void(0);' onclick='onEditRow(\"" + row.tid + "\",\"" + row.tsid + "\")' style='padding-top:0;padding-bottom:0;margin-right:3px;padding-left:2px;'><i class='fa fa-pencil'></i></a>";
+        operation = operation + "<a href='javascript:void(0);' onclick='onDeleteRow(\"" + row.sid + "\")' style='padding-top:0;padding-bottom:0;margin-right:3px;padding-left:2px;'><i class='fa fa-trash-o'></i></a>";
+        operation = operation  + "</div>";
+        return operation;
+    }
+
+    //成绩录入
+    function onEditRow (tid,tsid){
+        let href='/score/getScoreInfo?tid='+tid+'&tsid='+tsid;
+        layer.open({//iframe层
+            type : 2,//用1类型容易出错，建议用2
+            id : 'editScore', //设定一个id，防止重复弹出
+            area : [ '500px', '555px' ],
+            fix : false, //不固定
+            title : '成绩录入',
+            maxmin : false,
+            content : href,
+            btn : [ '提交', '关闭' ],
+            yes : function(index, layero) {
+                $(layero).find("iframe")[0].contentWindow.saveSubmit();
+            }
+        });
+    }
+
+    //删除
+    function onDeleteRow(id) {
+        layer.confirm("确定要删除选中记录吗？", {
+            btn: ['是', '否']
+        }, function (index) {
+            let url = '/score/score/'+id;
+            $.ajax({
+                url:url,
+                type:'DELETE',
+                success:function (data) {
+                    if (data.code === 200){
+                        layer.close(index);
+                        $("#TableList").bootstrapTable("refresh");
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                    }
                 }
             });
-        }
-        function refresh(msg) {
-            layer.closeAll();
-            layer.msg(msg, {time:1500, icon:1});
-        }
-    </script>
+        });
+    }
+
+    function refresh(msg) {
+        layer.closeAll();
+        $("#TableList").bootstrapTable("refresh");
+        layer.msg(msg, {time:1500, icon:1});
+    }
+    //]]>
+</script>
 </body>
 </html>

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <link rel="stylesheet" href="../../../js/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../../js/layui/css/layui.css">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
     <style>
         .body{
             /* margin-top: 20px; */
@@ -22,114 +23,167 @@
 <body>
     <div class="body">
         <form class="layui-form form" id="dataForm">
-            <div class="layui-form-item row">
-                <label class="layui-form-label">编号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required 
-                    placeholder="请输入课程编号" autocomplete="off" class="layui-input">
-                </div>
-            </div>
+            <input type="hidden" id="id" name="id"/>
+            <input type="hidden" name="studentId" th:value="${scoreMap.tid}"/>
+            <input type="hidden" name="teachSubjectId" th:value="${scoreMap.tsid}"/>
             <div class="layui-form-item row">
                 <label class="layui-form-label">课程名称</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required   
-                    placeholder="请输入课程名称" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item row">
-                <label class="layui-form-label">学号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required   
-                    placeholder="请输入学生学号" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item row">
-                <label class="layui-form-label">学生名字</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required   
-                    placeholder="请输入学生名字" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item row">
-                <label class="layui-form-label">学院名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required   
-                    placeholder="请输入学院名称" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item row">
-                <label class="layui-form-label">专业名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required
-                    placeholder="请输入专业名称" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item row">
-                <label class="layui-form-label">班级名称</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required
-                    placeholder="请输入班级名称" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item row">
-                <label class="layui-form-label">平时成绩</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required
-                    placeholder="请输入平时成绩" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item row">
-                <label class="layui-form-label">期中成绩</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required
-                    placeholder="请输入期中成绩" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item row">
-                <label class="layui-form-label">期末成绩</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required
-                    placeholder="请输入期末成绩" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item row">
-                <label class="layui-form-label">学分</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required
-                    placeholder="请输入所得学分" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item row">
-                <label class="layui-form-label">学期</label>
-                <div class="layui-input-block">
-                    <input type="text" name="username" required
-                    placeholder="请输入学期" autocomplete="off" class="layui-input">
+                    <input th:value="${scoreMap.subject_name}" readonly class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item row">
                 <label class="layui-form-label">授课教师</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required
-                    placeholder="请输入授课教师名字" autocomplete="off" class="layui-input">
+                    <input th:value="${scoreMap.tname}" readonly class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">学院名称</label>
+                <div class="layui-input-block">
+                    <input th:value="${scoreMap.department_name}" readonly class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">专业名称</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" readonly th:value="${scoreMap.major_name}">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">班级名称</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" readonly th:value="${scoreMap.grade_name}">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">学号</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" readonly th:value="${scoreMap.sno}">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">学生名字</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" readonly th:value="${scoreMap.sname}">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">学分</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" readonly th:value="${scoreMap.credit}">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">学年</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" readonly th:value="${scoreMap.school_year}">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">学期</label>
+                <div class="layui-input-block">
+                    <input class="layui-input" readonly th:value="${scoreMap.school_term}">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">平时成绩</label>
+                <div class="layui-input-block">
+                    <input type="number" id="normalScore" name="normalScore" required onblur="countScore()"
+                           placeholder="请输入平时成绩" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">期中成绩</label>
+                <div class="layui-input-block">
+                    <input type="number" id="midtermScore" name="midtermScore" required onblur="countScore()"
+                           placeholder="请输入期中成绩" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">期末成绩</label>
+                <div class="layui-input-block">
+                    <input type="number" id="endtermScore" name="endtermScore" required onblur="countScore()"
+                           placeholder="请输入期末成绩" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">总成绩</label>
+                <div class="layui-input-block">
+                    <input type="number" id="totalScore" name="totalScore" required readonly
+                           placeholder="平时×30%+期中×20%+期末×50%" autocomplete="off" class="layui-input">
                 </div>
             </div>
         </form>
     </div>
-    <script src="../../../js/jquery-2.1.1.min.js"></script>
-    <script src="../../../js/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../../js/jquery.validate/jquery.validate.ext.js"></script>
-    <script src="../../../js/jquery.validate/jquery.validate.js"></script>
-    <script src="../../../js/jquery.validate/messages_zh.js"></script>
-    <script src="../../../js/layui/layui.all.js"></script>
-    <script src=""></script>
-    <script>
-    $(function(){
+<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/jquery.validate/jquery.validate.js}"></script>
+<script th:src="@{/js/jquery.validate/jquery.validate.ext.js}"></script>
+<script th:src="@{/js/jquery.validate/messages_zh.js}"></script>
+<script th:src="@{/js/layui/layui.all.js}"></script>
+<script th:inline="javascript">
+    //<![CDATA[
 
-    })
+    let $form = $("#dataForm");
+    let scoreMap = [[${scoreMap}]];
+
+    $(function(){
+        let id = scoreMap.sid || '';
+        $("#id").val(id);
+        let normalScore = scoreMap.normal_score || '';//平时
+        let midtermScore = scoreMap.midterm_score || '';//期中
+        let endtermScore = scoreMap.endterm_score || '';//期末
+        let totalScore = scoreMap.total_score || '';//总成绩
+        $("#normalScore").val(normalScore);
+        $("#midtermScore").val(midtermScore);
+        $("#endtermScore").val(endtermScore);
+        $("#totalScore").val(totalScore);
+    });
+    
+    //计算总成绩
+    function countScore() {
+        let normalScore = $("#normalScore").val();//平时
+        let midtermScore = $("#midtermScore").val();//期中
+        let endtermScore = $("#endtermScore").val();//期末
+        let totalScore = Math.round(normalScore*0.3 + midtermScore*0.2 + endtermScore*0.5);//总成绩
+        $("#totalScore").val(totalScore);
+    }
+    
     function saveSubmit(){
-        // layer.alert("保存成功");
+        let validor = $form.validate();
+        if (validor.form()){
+            let id = $("#id").val();
+            if (id !== ''){
+                //id不为空，编辑
+                let url = '/score/score/'+id;
+                $.ajax({
+                    url:url,
+                    type:'PUT',
+                    data:$form.serializeArray(),
+                    success:function (data) {
+                        if (data.code === 200){
+                            window.parent.refresh(data.msg);
+                        }else {
+                            layer.msg(data.msg,{time:1500,icon:2});
+                        }
+                    }
+                });
+            }else {
+                //id为空，新增
+                let url = '/score/score';
+                $.post(url,$("#dataForm").serializeArray(),function (data) {
+                    if (data.code === 200){
+                        window.parent.refresh(data.msg);
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                    }
+                },"json");
+            }
+        }
     }
 
-    </script>
+    //]]>
+</script>
 </body>
 </html>
