@@ -52,6 +52,11 @@
 <script th:src="@{/js/dialog.min.js}"></script>
 <script th:inline="javascript">
     //<![CDATA[
+
+    //解决iframe嵌套跳转拦截页面的bug
+    if (window !== top){
+        top.location.href = location.href;
+    }
     $(function(){
         $("#loginForm").keydown(function(e) {
             let event = e || window.event;
