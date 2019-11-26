@@ -86,10 +86,10 @@
     });
 
    function updataPassword (){
-        var href='./dialog.html';
+        let href='/user/getUserInfo';
         layer.open({//iframe层
             type : 2,//用1类型容易出错，建议用2
-            id : 'addStudent', //设定一个id，防止重复弹出
+            id : 'changePwd', //设定一个id，防止重复弹出
             area : [ '500px', '300px' ],
             fix : false, //不固定
             title : '修改密码',
@@ -101,6 +101,22 @@
             }
         });
     }
+
+    //密码修改成功后
+    function afterUpdatePwd() {
+        layer.closeAll();
+        layer.confirm("密码修改成功，需要重新登录", {
+            btn: ['确定'],
+            cancel: function(){
+                //右上角关闭回调
+                window.location.href = '/logout';
+            }
+        },function (index) {
+            layer.close(index);
+            window.location.href = '/logout';
+        });
+    }
+
     //]]>
 </script>
 </body>

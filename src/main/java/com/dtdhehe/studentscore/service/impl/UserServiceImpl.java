@@ -64,4 +64,14 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    @Override
+    public Integer updatePassword(String userId, String password) {
+        User user = userMapper.findById(userId);
+        //新密码
+        String newPassword = PasswordUtils.getPWD(password, user.getUserName());
+        user.setPassword(newPassword);
+        user.setUpdateTime(DateUtils.formatDateTime2());
+        return userMapper.update(user);
+    }
 }

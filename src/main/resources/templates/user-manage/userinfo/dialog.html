@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <link rel="stylesheet" href="../../../js/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../../js/layui/css/layui.css">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/font-awesome.min.css}" />
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
     <style>
         .body{
             /* margin-top: 20px; */
@@ -16,6 +18,14 @@
         .layui-form-label{
             width: 100px;
         }
+        .search-icon{
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 35%;
+            left: 90%;
+            display: none;
+        }
     </style>
 
 </head>
@@ -25,41 +35,83 @@
             <div class="layui-form-item row">
                 <label class="layui-form-label">原始密码</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required 
+                    <input type="password" id="oldPassword" name="oldPassword" required
                     placeholder="请输入原始密码" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item row">
                 <label class="layui-form-label">新密码</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required 
+                    <input type="password" id="password" name="password" required
                     placeholder="请输入新密码" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item row">
                 <label class="layui-form-label">确认密码</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required 
-                    placeholder="请再次输入密码" autocomplete="off" class="layui-input">
+                    <input type="password" id="checkPwd" required onkeyup="validatePwd()"
+                           placeholder="请再次输入密码" autocomplete="off" class="layui-input">
+                    <i id="error" class="fa fa-times-circle search-icon" aria-hidden="true" style="color: red"></i>
+                    <i id="right" class="fa fa-check-circle-o search-icon" aria-hidden="true" style="color: green"></i>
                 </div>
             </div>
         </form>
     </div>
-    <script src="../../../js/jquery-2.1.1.min.js"></script>
-    <script src="../../../js/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../../js/jquery.validate/jquery.validate.ext.js"></script>
-    <script src="../../../js/jquery.validate/jquery.validate.js"></script>
-    <script src="../../../js/jquery.validate/messages_zh.js"></script>
-    <script src="../../../js/layui/layui.all.js"></script>
-    <script src=""></script>
-    <script>
+<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/jquery.validate/jquery.validate.js}"></script>
+<script th:src="@{/js/jquery.validate/jquery.validate.ext.js}"></script>
+<script th:src="@{/js/jquery.validate/messages_zh.js}"></script>
+<script th:src="@{/js/layui/layui.all.js}"></script>
+<script th:inline="javascript">
+    //<![CDATA[
+
+    let $form = $("#dataForm");
     $(function(){
 
-    })
-    function saveSubmit(){
-        // layer.alert("保存成功");
+    });
+
+    //检查密码是否一致
+    function validatePwd() {
+        let password = $("#password").val();
+        let checkPwd = $("#checkPwd").val();
+        if (password === checkPwd){
+            $("#error").hide();
+            $("#right").show();
+        }else {
+            $("#error").show();
+            $("#right").hide();
+        }
     }
 
-    </script>
+    function saveSubmit(){
+        if ($("#right").is(':hidden')) {
+            layer.msg("两次密码不一致",{time:1500,icon:2});
+            return;
+        }
+        let validor = $form.validate();
+        if (validor.form()){
+            let url = '/user/changePassword';
+            $.ajax({
+                url:url,
+                type:'PUT',
+                data:$form.serializeArray(),
+                success:function (data) {
+                    if (data.code === 200){
+                        window.parent.afterUpdatePwd();
+                    }else {
+                        layer.msg(data.msg,{time:1500,icon:2});
+                        $("#oldPassword").val('');
+                        $("#password").val('');
+                        $("#checkPwd").val('');
+                        $("#right").hide();
+                    }
+                }
+            });
+        }
+    }
+
+    //]]>
+</script>
 </body>
 </html>

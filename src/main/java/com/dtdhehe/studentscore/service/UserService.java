@@ -22,4 +22,13 @@ public interface UserService {
      * @return
      */
     Integer saveOrUpdateUser(User user);
+
+    /**
+     * 根据id更新用户的password
+     * @param userId
+     * @param password
+     * @return
+     */
+    Integer updatePassword(String userId,String password);
+
 }
