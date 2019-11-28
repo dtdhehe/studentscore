@@ -82,7 +82,7 @@
               <div class="subNav sublist-up"><span class="title-icon glyphicon glyphicon-chevron-up"></span><span class="sublist-title">轮播图管理</span></div>
               <ul class="navContent" style="display:none">
                 <li onclick="changeBar(this)">
-                  <a href="javascript:void (0)" onclick="getSetting()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">轮播图</span></a></li>
+                  <a href="javascript:void (0)" onclick="getWrap()"><span class="sublist-icon glyphicon glyphicon-user"></span><span class="sub-title">轮播图</span></a></li>
               </ul>
             </div>
           </div>
@@ -141,9 +141,9 @@
       function getPersonal() {
           $("#iframe").attr('src','/user/getUserManage');
       }
-      //首页设置
-      function getSetting() {
-          
+      //轮播图设置
+      function getWrap() {
+          $("#iframe").attr('src','/wrap/getWrapManage');
       }
 
       

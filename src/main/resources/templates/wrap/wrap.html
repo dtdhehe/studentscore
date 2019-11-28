@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>轮播图</title>
-    <link rel="stylesheet" href="../../js/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../../js/bootstrap-table/css/bootstrap-table.css">
-    <link rel="stylesheet" href="../../js/layer/theme/default/layer.css">
-    <link rel="stylesheet" href="../../js/layui/css/layui.css">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap-table/css/bootstrap-table.css}">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/font-awesome.min.css}" />
+    <link rel="stylesheet" th:href="@{/js/layer/theme/default/layer.css}">
+
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
     <style>
         #content{
             width: 100%;
@@ -45,14 +48,16 @@
             </div>
         </div>
     </div>
-    <script src="../../js/jquery-2.1.1.min.js"></script>
-    <script src="../../js/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../../js/bootstrap-table/js/bootstrap-table.js"></script>
-    <script src="../../js/bootstrap-table/js/bootstrap-table-zh-CN.js"></script>
-    <script src="../../js/layui/layui.all.js"></script>
-    <script src="../../js/layer/layer.js"></script>
-    <script src="../../js/public/table-init.js"></script>
-    <script>
+<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-table/js/bootstrap-table.js}"></script>
+<script th:src="@{/js/bootstrap-table/js/bootstrap-table-zh-CN.js}"></script>
+<script th:src="@{/js/layui/layui.all.js}"></script>
+<script th:src="@{/js/layer/layer.js}"></script>
+<script th:src="@{/js/public/table-init.js}"></script>
+
+<script th:inline="javascript">
+    //<![CDATA[
     $(function(){
             Events.TableInit({
                 bootstrapTableId:'#TableList',
@@ -65,7 +70,7 @@
         });
 
         function addDialog (){
-            var href='./dialog.html';
+            let href='/wrap/getWrapInfo';
             layer.open({//iframe层
                 type : 2,//用1类型容易出错，建议用2
                 id : 'addStudent', //设定一个id，防止重复弹出
@@ -80,6 +85,7 @@
                 }
             });
         }
-    </script>
+    //]]>
+</script>
 </body>
 </html>
