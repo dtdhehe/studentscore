@@ -89,4 +89,19 @@ public class DateUtils {
         return date;
     }
 
+    /**
+     * 获取当前年月日,时分秒毫秒
+     * 格式 2018101015000000   16位
+     * @return
+     */
+    public static String getCurrentDateTime(){
+        Date now = new Date();
+        //获取当前年月日
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:mm");
+        String currentDate = dateFormat.format(now);
+        String time = currentDate.replace("/","");
+        String currentTime = time.replace(" ","");
+        return currentTime.replace(":","");
+    }
+
 }

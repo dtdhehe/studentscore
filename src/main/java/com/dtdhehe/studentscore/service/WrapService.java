@@ -17,4 +17,11 @@ public interface WrapService {
      */
     Wrap findById(String id);
 
+    /**
+     * 新增或修改
+     * @param wrap
+     * @return
+     */
+    Integer saveOrUpdate(Wrap wrap);
+
 }

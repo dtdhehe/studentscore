@@ -24,4 +24,6 @@ public class Wrap {
     private String wrapDesc;
 
     private String wrapStatus;
+
+    private String imgUrl;
 }

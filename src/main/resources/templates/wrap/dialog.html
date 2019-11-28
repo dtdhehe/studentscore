@@ -34,25 +34,36 @@
 <body>
     <div class="body">
         <form class="layui-form form" id="dataForm">
-            <input type="hidden" name="id" th:value="${wrap.id}" />
+            <input type="hidden" id="id" name="id" th:value="${wrap.id}" />
             <div class="layui-form-item row">
                 <label class="layui-form-label">标题</label>
                 <div class="layui-input-block">
-                    <input type="text" name="username" required 
-                    placeholder="请输入图片标题" autocomplete="off" class="layui-input">
+                    <input type="text" name="wrapName" required
+                           placeholder="请输入图片标题" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item layui-form-text row">
                 <label class="layui-form-label">介绍</label>
                 <div class="layui-input-block">
-                    <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    <textarea name="wrapDesc" required placeholder="请输入内容" class="layui-textarea"></textarea>
                 </div>
-            </div>   
+            </div>
+            <div class="layui-form-item layui-form-text row">
+                <label class="layui-form-label">启用状态</label>
+                <div class="layui-input-block">
+                    <select id="departmentSelect" name="departmentId" th:field="${wrap.wrapStatus}">
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>
+                    </select>
+                </div>
+            </div>
             <div class="layui-form-item row ">
                 <label class="layui-form-label">图片</label>
                 <button type="button" class="layui-btn" id="uploadImg">
                     <i class="layui-icon">&#xe67c;</i>上传图片
                 </button>
+                <span id="imgInfo"></span>
+                <input id="imgUrl" type="hidden" name="imgUrl" />
                 <button type="button" id="upload" style="display: none"></button>
             </div>
         </form>
@@ -65,12 +76,21 @@
 <script th:src="@{/js/layui/layui.all.js}"></script>
 <script th:inline="javascript">
     //<![CDATA[
+    let $form = $("#dataForm");
     $(function(){
 
     });
     function saveSubmit(){
-        // 确认上传图片
-        $("#upload").click();
+        let validor = $form.validate();
+        if (validor.form()){
+            let imgName = $("#imgInfo").text();
+            if (imgName === ''){
+                layer.msg("请选择图片",{time:1500,icon:2});
+                return;
+            }
+            // 确认上传图片
+            $("#upload").click();
+        }
     }
 
     //图片控件初始化
@@ -79,37 +99,59 @@
         //执行实例
         let uploadInst = upload.render({
             elem: '#uploadImg', //绑定元素
-            url: '/upload/', //上传接口
-            multiple: true,
+            url: '/wrap/upload/', //上传接口
             accept:'images',//上传校验文件类型
             acceptMime:'image/*',//打开文件选择器显示类型
             auto:false,//选择完文件后是否自动上传
             bindAction:'#upload',//指定一个按钮触发上传,配合auto为false使用
             choose:function(obj){
-                let files = obj.pushFile();
                 //选择完文件后的回调函数
                 obj.preview(function (index, file, result) {
                     console.log(index); //得到文件索引
                     console.log(file); //得到文件对象
                     console.log(result); //得到文件base64编码，比如图片
-                    parent.layer.open({
-                        type:1,
-                        id:'preview',
-                        area : [ '450px', '430px' ],
-                        fix : false, //不固定
-                        title : '图片预览',
-                        skin:'head-skin',
-                        maxmin : false,
-                        content:'<div style="text-align: center;"><img src="'+result+'" style="margin-top: 20px;width: 300px;height: auto;" /><br/></div>',
-                        cancel : function () {
-                            delete files[index];
+                    let img = new Image();
+                    img.src = result;
+                    img.onload = function () {
+                        if (img.width !== 974 || img.height !== 340){
+                            layer.msg("您上传的小图大小必须是974*340尺寸！");
+                            return false;
+                        }else {
+                            $("#imgInfo").text(file.name);
                         }
-
-                    });
+                    }
                 })
             },
             done: function(res){
                 //上传完毕回调
+                $("#imgUrl").val(res.data.src);
+                let id = $("#id").val();
+                if (id !== ''){
+                    //id不为空，编辑
+                    let url = '/wrap/'+id;
+                    $.ajax({
+                        url:url,
+                        type:'PUT',
+                        data:$form.serializeArray(),
+                        success:function (data) {
+                            if (data.code === 200){
+                                window.parent.refresh(data.msg);
+                            }else {
+                                layer.msg(data.msg,{time:1500,icon:2});
+                            }
+                        }
+                    });
+                }else {
+                    //id为空，新增
+                    let url = '/wrap/';
+                    $.post(url,$("#dataForm").serializeArray(),function (data) {
+                        if (data.code === 200){
+                            window.parent.refresh(data.msg);
+                        }else {
+                            layer.msg(data.msg,{time:1500,icon:2});
+                        }
+                    },"json");
+                }
             },
             error: function(){
                 //请求异常回调
