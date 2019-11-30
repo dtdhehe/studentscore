@@ -6,6 +6,7 @@ import com.dtdhehe.studentscore.util.ConstantUtils;
 import com.dtdhehe.studentscore.util.DateUtils;
 import com.dtdhehe.studentscore.util.ResultUtils;
 import com.dtdhehe.studentscore.vo.ResultVO;
+import com.dtdhehe.studentscore.vo.TableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -75,7 +77,8 @@ public class WrapController {
             File upFile = new File(resultUrl);
             file.transferTo(upFile);
             Map<String,Object> data = new HashMap<>();
-            data.put("src",resultUrl);
+            //因为浏览器原因，设置虚拟路径为   /uploads/
+            data.put("src","/uploads/"+fileNewName);
             resultMap.put("code",0);
             resultMap.put("msg","上传成功");
             resultMap.put("data",data);
@@ -98,6 +101,54 @@ public class WrapController {
     public ResultVO saveTeachSubject(Wrap wrap){
         Integer result = wrapService.saveOrUpdate(wrap);
         return result.equals(ConstantUtils.SUCCESS)? ResultUtils.success("保存成功"):ResultUtils.failed("保存失败,请重新保存");
+    }
+
+    /**
+     * table查询轮播图列表
+     * @param rows
+     * @param page
+     * @param wrapName
+     * @return
+     */
+    @GetMapping("/queryWrap")
+    @ResponseBody
+    public TableModel queryWrap(@RequestParam("rows") Integer rows, @RequestParam("page") Integer page,
+                                  @RequestParam(value = "wrapName",required = false)String wrapName,
+                                  @RequestParam(value = "wrapStatus",required = false)String wrapStatus){
+        TableModel tableModel = new TableModel();
+        Map<String,Object> queryMap = new HashMap<>(16);
+        queryMap.put("pageSize",rows);
+        queryMap.put("pageNum",page + 1);
+        queryMap.put("wrapName",wrapName);
+        queryMap.put("wrapStatus",wrapStatus);
+        Map<String,Object> resultMap = wrapService.queryWrap(queryMap);
+        tableModel.setRows((List) resultMap.get("list"));
+        tableModel.setTotal((Integer) resultMap.get("count"));
+        return tableModel;
+    }
+
+    /**
+     * 更新轮播图
+     * @param wrap
+     * @return
+     */
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ResultVO updateWrap(Wrap wrap){
+        Integer result = wrapService.saveOrUpdate(wrap);
+        return result.equals(ConstantUtils.SUCCESS)?ResultUtils.success("修改成功"):ResultUtils.failed("修改失败,请重新修改");
+    }
+
+    /**
+     * 删除轮播图
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResultVO deleteWrap(@PathVariable("id") String id){
+        Integer result = wrapService.delete(id);
+        return result.equals(ConstantUtils.SUCCESS)?ResultUtils.success("删除成功"):ResultUtils.failed("删除失败,请重新删除");
     }
 
 }

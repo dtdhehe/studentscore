@@ -38,20 +38,20 @@
             <div class="layui-form-item row">
                 <label class="layui-form-label">标题</label>
                 <div class="layui-input-block">
-                    <input type="text" name="wrapName" required
+                    <input type="text" name="wrapName" required th:value="${wrap.wrapName}"
                            placeholder="请输入图片标题" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-form-item layui-form-text row">
                 <label class="layui-form-label">介绍</label>
                 <div class="layui-input-block">
-                    <textarea name="wrapDesc" required placeholder="请输入内容" class="layui-textarea"></textarea>
+                    <textarea name="wrapDesc" required placeholder="请输入内容" th:text="${wrap.wrapDesc}" class="layui-textarea"></textarea>
                 </div>
             </div>
             <div class="layui-form-item layui-form-text row">
                 <label class="layui-form-label">启用状态</label>
                 <div class="layui-input-block">
-                    <select id="departmentSelect" name="departmentId" th:field="${wrap.wrapStatus}">
+                    <select id="wrapStatusSelect" name="wrapStatus" th:field="${wrap.wrapStatus}">
                         <option value="1">启用</option>
                         <option value="0">禁用</option>
                     </select>
@@ -63,7 +63,7 @@
                     <i class="layui-icon">&#xe67c;</i>上传图片
                 </button>
                 <span id="imgInfo"></span>
-                <input id="imgUrl" type="hidden" name="imgUrl" />
+                <input id="imgUrl" type="hidden" name="imgUrl" th:value="${wrap.imgUrl}" />
                 <button type="button" id="upload" style="display: none"></button>
             </div>
         </form>
@@ -78,7 +78,15 @@
     //<![CDATA[
     let $form = $("#dataForm");
     $(function(){
-
+        let wrap = [[${wrap}]];
+        let imgUrl = wrap.imgUrl || '';
+        if (imgUrl !== ''){
+            let index = imgUrl.lastIndexOf("/");
+            //图片名称为最后一个反斜杠后的内容
+            let imgName = imgUrl.substring(index+1,imgUrl.length);
+            let oldName = imgName.substring(16,imgName.length);
+            $("#imgInfo").text(oldName);
+        }
     });
     function saveSubmit(){
         let validor = $form.validate();
@@ -88,8 +96,26 @@
                 layer.msg("请选择图片",{time:1500,icon:2});
                 return;
             }
-            // 确认上传图片
-            $("#upload").click();
+            //判断是否为修改
+            if ($("#imgUrl").val() === ''){
+                // 确认上传图片
+                $("#upload").click();
+            }else {
+                let id = $("#id").val();
+                let url = '/wrap/'+id;
+                $.ajax({
+                    url:url,
+                    type:'PUT',
+                    data:$form.serializeArray(),
+                    success:function (data) {
+                        if (data.code === 200){
+                            window.parent.refresh(data.msg);
+                        }else {
+                            layer.msg(data.msg,{time:1500,icon:2});
+                        }
+                    }
+                });
+            }
         }
     }
 

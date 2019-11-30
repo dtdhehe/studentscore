@@ -1,7 +1,11 @@
 package com.dtdhehe.studentscore.mapper;
 
 import com.dtdhehe.studentscore.entity.Wrap;
+import com.dtdhehe.studentscore.provider.WrapMapperProvider;
 import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 陈珊珊
@@ -30,5 +34,13 @@ public interface WrapMapper {
      */
     @Update("update wrap set valid_flag=#{validFlag},update_time=#{updateTime},wrap_name=#{wrapName},wrap_desc=#{wrapDesc},wrap_status=#{wrapStatus},img_url=#{imgUrl} where id=#{id}")
     Integer update(Wrap wrap);
+
+    /**
+     * 查询轮播图列表
+     * @param queryMap
+     * @return
+     */
+    @SelectProvider(type = WrapMapperProvider.class,method = "queryWrap")
+    List<Map<String,Object>> queryWrap(Map<String,Object> queryMap);
 
 }

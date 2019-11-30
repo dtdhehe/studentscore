@@ -2,6 +2,8 @@ package com.dtdhehe.studentscore.service;
 
 import com.dtdhehe.studentscore.entity.Wrap;
 
+import java.util.Map;
+
 /**
  * @author 陈姗姗
  * @version 1.0.0
@@ -23,5 +25,19 @@ public interface WrapService {
      * @return
      */
     Integer saveOrUpdate(Wrap wrap);
+
+    /**
+     * 根据条件查询轮播图信息
+     * @param queryMap
+     * @return
+     */
+    Map<String,Object> queryWrap(Map<String,Object> queryMap);
+
+    /**
+     * 根据id删除轮播图
+     * @param id
+     * @return
+     */
+    Integer delete(String id);
 
 }
