@@ -26,4 +26,6 @@ public class Wrap {
     private String wrapStatus;
 
     private String imgUrl;
+
+    private String wrapNo;
 }

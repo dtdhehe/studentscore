@@ -41,11 +41,12 @@
     height: 99%;
 }
 .info-center .info-title{ margin-top:30px; margin-bottom:10px;padding-left: 15px;padding-right: 15px;}
-.info-center .info-title h4{ margin-bottom:0px;}
+.info-center .info-title h2{ margin-bottom:0px;font-size: 28px}
+.info-center .info-title .tit{ font-size: 30px;margin-top: 15px}
 .info-center .time-title { height:70px;}
 .time-title .hour-minute strong{ font-size:34px;}
 .year-month p{ margin-bottom:0px;}
-.year-month p span{ font-size:24px;}
+.year-month p .year{ font-size:24px;}
 .content-list{ margin-top:30px;}
 .content-list .row{ margin-left:0px; margin-right:0px;}
 .content-list .row .content{ background-color:#FFF;}

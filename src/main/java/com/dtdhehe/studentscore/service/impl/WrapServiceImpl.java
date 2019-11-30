@@ -73,4 +73,9 @@ public class WrapServiceImpl implements WrapService {
         wrap.setUpdateTime(DateUtils.formatDateTime2());
         return wrapMapper.update(wrap);
     }
+
+    @Override
+    public List<Wrap> queryAll() {
+        return wrapMapper.queryAll();
+    }
 }

@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>首页</title>
-    <link rel="stylesheet" href="../js/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/main/dermadefault.css">
-    <link rel="stylesheet" href="../css/main/templatecss.css">
-    <link rel="stylesheet" href="../css/main/main.css">
-    <link rel="stylesheet" href="../css/main/main-content.css">
+    <link rel="stylesheet" th:href="@{/js/bootstrap/css/bootstrap.min.css}" >
+    <link rel="stylesheet" th:href="@{/css/main/dermadefault.css}">
+    <link rel="stylesheet" th:href="@{/css/main/templatecss.css}">
+    <link rel="stylesheet" th:href="@{/css/main/main.css}">
+    <link rel="stylesheet" th:href="@{/css/main/main-content.css}">
 </head>
 <body>
     <div class=" my-index right-full">
@@ -18,76 +20,25 @@
                 <!-- 标题模块 -->
                 <div class="info-title">
                     <div class="pull-left">
-                    <h4><strong>Administrator，</strong></h4>
-                    <p>欢迎登录学生成绩管理系统！</p>
+                    <h2><strong>Administrator，</strong></h2>
+                    <p class="tit">欢迎登录学生成绩管理系统！</p>
                     </div>
                     <div class="time-title pull-right">
                         <div class="year-month pull-left">
-                        <p>星期三</p>
-                        <p><span>2019</span>年11月6日</p>
-                        </div>
-                        <div class="hour-minute pull-right">
-                            <strong>9:00</strong>
+                        <p th:text="${currSun}"></p>
+                            <p><span class="year" th:text="${year}"></span><span th:text="${date}"></span></p>
                         </div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <div class="content-list">
-                    <!--待处理项  -->
-                    <div class="row">
-                    <div class="col-md-3">
-                        <div class="content">
-                        <div class="w30 left-icon pull-left">
-                            <span class="glyphicon glyphicon-file blue"></span>
-                        </div>
-                        <div class="w70 right-title pull-right">
-                        <div class="title-content">
-                            <p>教师审批事件</p>
-                            <h3 class="number">90</h3>
-                            <button class="btn btn-default">待我处理
-                                <span style="color:red;">12</span>
-                            </button>
-                        </div>
-                        </div>
-                        <div class="clearfix"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="content">
-                            <div class="w30 left-icon pull-left">
-                            <span class="glyphicon glyphicon-file violet"></span>
-                            </div>
-                            <div class="w70 right-title pull-right">
-                            <div class="title-content">
-                                <p>学生审批事件</p>
-                                <h3 class="number">90</h3>
-                                <button class="btn btn-default">待我处理
-                                <span style="color:red;">12</span>
-                                </button>
-                            </div>
-                            </div>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
                 <div class="school-info">
                     <div class="banner_wrap">
                         <ul>
-                            <li class="on" style="display: block;">
-                                <img src="../image/main-img/15151432417741.jpg" height="340px" /></li>
-                            <li><img src="../image/main-img/14766931740570.jpg" height="340px" /></li>
-                            <li><img src="../image/main-img/15151438816406.jpg" height="340px" /></li>
-                            <li><img src="../image/main-img/15151397738457.jpg" height="340px" /></li>
-                            <li><img src="../image/main-img/15151446810109.jpg" height="340px" /></li>
+                            <li th:each="wrap,wrapStat:${wrapList}" th:classappend="${wrapStat.first} ? 'on':''" style="display: block"><img th:src="${wrap.imgUrl}" height="340px" /></li>
                         </ul>
                         <div class="banner_select">
                             <ul>
-                                <li> 金荣楼 </li>
-                                <li> 芳名湖</li>
-                                <li> 梅园后山 </li>
-                                <li> 中区操场</li>
-                                <li  class="last"> 莆院大门</li>
+                                <li th:each="wrap,wrapStat:${wrapList}" th:classappend="${wrapStat.last} ? 'last':''" th:text="${wrap.wrapName}"></li>
                             </ul>
                             <div class="J_trigger_line"></div>
                         </div>
@@ -96,67 +47,69 @@
             </div>
         </div>
     </div>
-    <script src="../js/jquery-2.1.1.min.js"></script>
-    <script src="../js/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var aa = 0;
-            var size = $(".banner_select>ul li").size(); //5
-            var img_size = $(".banner_wrap>ul li").size(); //5
-            for(var i = 0; i <= size - 1; i++) {
-                $(".banner_select>ul li")[i].id = i;
-                $(".banner_wrap>ul li")[i].id = i;
-            }
+<script th:src="@{/js/jquery-2.1.1.min.js}"></script>
+<script th:src="@{/js/bootstrap/js/bootstrap.min.js}"></script>
+<script th:inline="javascript">
+    //<![CDATA[
+    $(document).ready(function() {
+        var aa = 0;
+        var size = $(".banner_select>ul li").size(); //5
+        var img_size = $(".banner_wrap>ul li").size(); //5
+        for(var i = 0; i <= size - 1; i++) {
+            $(".banner_select>ul li")[i].id = i;
+            $(".banner_wrap>ul li")[i].id = i;
+        }
 
-            $(".banner_select>ul li").hover(function() {
-                aa = this.id
-                $(".J_trigger_line").css({
-                    "left": (this.id * 195)
-                })
-                $(".banner_wrap>ul li").eq(this.id).addClass("on").siblings(this).removeClass("on");;
-                $(".banner_wrap>ul li").eq(this.id).fadeIn(500).siblings(this).fadeOut(500);
-            });
-
-            function move() {
-                $(".J_trigger_line").css({
-                    "left": (aa * 195)
-                })
-                $(".banner_wrap>ul li").eq(aa).addClass("on").siblings(aa).removeClass("on");
-                $(".banner_wrap>ul li").eq(aa).fadeIn(500).siblings(aa).fadeOut(500);
-            }
-
-            var t = setInterval(lunbo, 2000);
-
-            function lunbo() {
-                if(aa == img_size) {
-                    aa = 0;
-                }
-                move();
-                aa++
-            }
-            $(".banner_wrap").hover(function() {
-                clearInterval(t);
-            }, function() {
-                t = setInterval(lunbo, 2000);
-            });
-            $(".left").click(function() {
-                if(aa <= 1) {
-                    aa = 6;
-                }
-                aa -= 2;
-                move();
-                aa++;
+        $(".banner_select>ul li").hover(function() {
+            aa = this.id
+            $(".J_trigger_line").css({
+                "left": (this.id * 195)
             })
-            $(".right").click(function() {
-                if(aa == 5) {
-                    aa = 0;
-                }
-                aa++;
-                aa--;
-                move();
-                aa++;
+            $(".banner_wrap>ul li").eq(this.id).addClass("on").siblings(this).removeClass("on");;
+            $(".banner_wrap>ul li").eq(this.id).fadeIn(500).siblings(this).fadeOut(500);
+        });
+
+        function move() {
+            $(".J_trigger_line").css({
+                "left": (aa * 195)
             })
+            $(".banner_wrap>ul li").eq(aa).addClass("on").siblings(aa).removeClass("on");
+            $(".banner_wrap>ul li").eq(aa).fadeIn(500).siblings(aa).fadeOut(500);
+        }
+
+        var t = setInterval(lunbo, 2000);
+
+        function lunbo() {
+            if(aa == img_size) {
+                aa = 0;
+            }
+            move();
+            aa++
+        }
+        $(".banner_wrap").hover(function() {
+            clearInterval(t);
+        }, function() {
+            t = setInterval(lunbo, 2000);
+        });
+        $(".left").click(function() {
+            if(aa <= 1) {
+                aa = 6;
+            }
+            aa -= 2;
+            move();
+            aa++;
         })
-    </script>
+        $(".right").click(function() {
+            if(aa == 5) {
+                aa = 0;
+            }
+            aa++;
+            aa--;
+            move();
+            aa++;
+        })
+    })
+    //]]>
+</script>
 </body>
 </html>

@@ -57,6 +57,13 @@
                     </select>
                 </div>
             </div>
+            <div class="layui-form-item row">
+                <label class="layui-form-label">序号</label>
+                <div class="layui-input-block">
+                    <input type="number" name="wrapNo" required th:value="${wrap.wrapNo}"
+                           placeholder="请输入序号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
             <div class="layui-form-item row ">
                 <label class="layui-form-label">图片</label>
                 <button type="button" class="layui-btn" id="uploadImg">

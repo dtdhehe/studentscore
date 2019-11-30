@@ -2,6 +2,7 @@ package com.dtdhehe.studentscore.service;
 
 import com.dtdhehe.studentscore.entity.Wrap;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,5 +40,11 @@ public interface WrapService {
      * @return
      */
     Integer delete(String id);
+
+    /**
+     * 查询所有启用轮播图
+     * @return
+     */
+    List<Wrap> queryAll();
 
 }
