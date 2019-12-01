@@ -1,12 +1,7 @@
 package com.dtdhehe.studentscore.controller;
 
-import com.dtdhehe.studentscore.entity.Student;
-import com.dtdhehe.studentscore.entity.Teacher;
-import com.dtdhehe.studentscore.entity.User;
-import com.dtdhehe.studentscore.service.DepartmentService;
-import com.dtdhehe.studentscore.service.StudentService;
-import com.dtdhehe.studentscore.service.TeacherService;
-import com.dtdhehe.studentscore.service.UserService;
+import com.dtdhehe.studentscore.entity.*;
+import com.dtdhehe.studentscore.service.*;
 import com.dtdhehe.studentscore.util.ConstantUtils;
 import com.dtdhehe.studentscore.util.DateUtils;
 import com.dtdhehe.studentscore.util.PasswordUtils;
@@ -37,6 +32,10 @@ public class UserController {
     private DepartmentService departmentService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private GradeService gradeService;
+    @Autowired
+    private MajorService majorService;
 
     /**
      * 个人信息管理
@@ -51,13 +50,20 @@ public class UserController {
             //教师身份
             Teacher teacher = teacherService.findByUserId(user.getId());
             model.addAttribute("teacher",teacher);
+            Department department = departmentService.findById(teacher.getDepartmentId());
+            model.addAttribute("department",department);
         }else if (ConstantUtils.STUDENT.equals(user.getStatus())){
             //学生身份
             Student student = studentService.findByUserId(user.getId());
             model.addAttribute("student",student);
+            Department department = departmentService.findById(student.getDepartmentId());
+            model.addAttribute("department",department);
+            Major major = majorService.findById(student.getMajorId());
+            model.addAttribute("major",major);
+            Grade grade = gradeService.findById(student.getGradeId());
+            model.addAttribute("grade",grade);
         }
         model.addAttribute("user",user);
-        model.addAttribute("department",departmentService.findAll());
         return "user-manage/userinfo/userinfo";
     }
 

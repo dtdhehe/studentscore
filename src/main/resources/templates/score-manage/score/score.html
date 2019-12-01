@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>成绩管理</title>
@@ -29,32 +30,48 @@
         <div class="well container">
             <div class="layui-form form">
                 <form id="queryForm" class="row">
+                    <input type="hidden" name="tid" th:if="${user.status == '2'}" th:value="${student.id}"/>
+                    <input type="hidden" name="teid" th:if="${user.status == '1'}" th:value="${teacher.id}"/>
                     <div class="col-md-3">
                         <input type="text" name="subjectName" placeholder="请输入课程名称" autocomplete="off" class="layui-input">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3" shiro:hasRole="teacher">
                         <select name="departmentId" lay-filter="department">
                             <option value="">请选择学院</option>
                             <option th:each="item:${departmentList}" th:value="${item.id}" th:text="${item.departmentName}"></option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3" shiro:hasRole="teacher">
                         <select id="majorSelect" name="majorId" lay-filter="major">
                             <option value="">请选择专业</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3" shiro:hasRole="teacher">
                         <select id="gradeSelect" name="gradeId" lay-filter="grade">
                             <option value="">请选择班级</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3" shiro:hasRole="student">
                         <input type="text" name="teacherName" placeholder="请输入任课教师名字" autocomplete="off" class="layui-input">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3" shiro:hasRole="teacher">
                         <input type="text" name="sno" placeholder="请输入学号" autocomplete="off" class="layui-input">
                     </div>
                     <div class="col-md-3">
+                        <input type="text" name="schoolYear" placeholder="请输入学年" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="schoolTerm" name="schoolTerm">
+                            <option value="">请选择学期</option>
+                            <option value="1">第一学期</option>
+                            <option value="2">第二学期</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3" shiro:hasRole="teacher">
+                        <select name="orderType">
+                            <option value="1">按学号排序</option>
+                            <option value="2">按成绩排序</option>
+                        </select>
                     </div>
                     <div  class="col-md-3">
                         <button type="button" class="layui-btn" onclick="search()">搜索</button>
@@ -81,8 +98,8 @@
                             <!--<th data-align="center" data-field="normal_score">平时成绩</th>-->
                             <!--<th data-align="center" data-field="midterm_score">期中成绩</th>-->
                             <!--<th data-align="center" data-field="endterm_score">期末成绩</th>-->
-                            <th data-align="center" data-field="total_score" data-formatter="total_score_formatter">总成绩</th>
-                            <th data-align="center" data-width="100" data-field="operation"
+                            <th data-width="100" data-align="center" data-field="total_score" data-formatter="total_score_formatter">总成绩</th>
+                            <th shiro:hasRole="teacher" data-align="center" data-width="100" data-field="operation"
                                 data-formatter="operation_formatter" data-show-tip="false">操作</th>
                         </tr>
                     </thead>
@@ -105,9 +122,7 @@
         Events.TableInit({
             bootstrapTableId:'#TableList',
             url:'/score/queryScore',
-            option:{
-
-            }
+            queryFormId: "#queryForm",//查询表单id，不需要过滤查询此属性可不填写
         });
         initForm();
     });

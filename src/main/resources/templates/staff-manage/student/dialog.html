@@ -50,7 +50,7 @@
             <div class="layui-form-item row">
                 <label class="layui-form-label">学号</label>
                 <div class="layui-input-block">
-                    <input type="number" name="sno" required th:value="${student.sno}"
+                    <input type="number" id="sno" name="sno" required th:value="${student.sno}"
                            placeholder="请输入学生学号" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -75,6 +75,11 @@
     let $form = $("#dataForm");
 
     $(function(){
+        //如果是编辑，学号不可变
+        let id = $("#id").val();
+        if (id !== ''){
+            $("#sno").attr("readonly","readonly");
+        }
         initMajorSelect([[${student.departmentId}]]);
         initGradeSelect([[${student.majorId}]]);
     });

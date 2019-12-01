@@ -52,6 +52,9 @@ public class ScoreMapperProvider {
             if (!StringUtils.isEmpty(queryMap.get("tsid"))){
                 where.append(" and ts.id =#{tsid}");
             }
+            if (!StringUtils.isEmpty(queryMap.get("teid"))){
+                where.append(" and te.id =#{teid}");
+            }
         }
         String sql = "SELECT t.id tid,ts.id tsid,sc.id sid,s.subject_name,te.`name` tname,d.department_name,m.major_name,g.grade_name,\n" +
                 "t.sno,t.name sname,s.credit,ts.school_year,ts.school_term,\n" +
@@ -64,7 +67,12 @@ public class ScoreMapperProvider {
                 "LEFT JOIN `subject` s ON ts.subject_id=s.id\n" +
                 "LEFT JOIN teacher te ON ts.teacher_id=te.id\n" +
                 "LEFT JOIN score sc ON t.id = sc.student_id AND ts.id = sc.teach_subject_id AND sc.valid_flag='1'\n" +
-                "WHERE " + where + " ORDER BY t.sno ASC";
+                "WHERE " + where;
+        if ("1".equals(queryMap.get("orderType"))){
+            sql = sql + " ORDER BY t.sno ASC";
+        }else {
+            sql = sql + " ORDER BY sc.total_score DESC";
+        }
         if (log.isDebugEnabled()){
             log.debug("SQL语句为:" + sql);
         }

@@ -1,6 +1,14 @@
 Events = {
     //bootstrap表单初始化
     TableInit :function (params){
+        var queryFormId = params.queryFormId;
+        var formQueryParams = {};
+        if (queryFormId && $(queryFormId).length > 0) {
+            var fields = $(queryFormId).serializeArray();
+            $.each(fields, function (i, field) {
+                formQueryParams[field.name] = field.value;
+            });
+        }
         let tableId = params.bootstrapTableId;
         let _options = $.extend({},{
             url: params.url,//请求后台的URL
@@ -26,12 +34,12 @@ Events = {
             contentType: "application/x-www-form-urlencoded",//为了让后台获取页码和行数的参数（切记不可少）
             queryParams: function (params) {
                 //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
-                let temp = {
+                let temp = $.extend(formQueryParams,{
                     rows: params.limit,                         //页面大小
                     page: (params.offset / params.limit),   //页码
                     sort: params.sort,      //排序列名
                     sortOrder: params.order //排位命令（desc，asc）
-                };
+                });
                 return temp;
             }
         },params.option);

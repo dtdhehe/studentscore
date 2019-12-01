@@ -17,7 +17,7 @@ public interface UserMapper {
      * @param userName
      * @return
      */
-    @Select("select t.* from user t where t.user_name=#{userName}")
+    @Select("select t.* from user t where t.user_name=#{userName} and t.valid_flag='1'")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "roleList",column = "id",
